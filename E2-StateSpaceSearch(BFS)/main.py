@@ -38,6 +38,8 @@ if __name__ == '__main__':
 	goal_states, goal_paths, explored_states = BFS()
 	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
 	print("\nGOAL STATES COUNT: ", len(goal_states))
+	print("\nINITIAL STATE")
+	print(INITIAL_STATE)
 	print("\nGOAL STATES")
 	for state in goal_states:
 		print(state)
