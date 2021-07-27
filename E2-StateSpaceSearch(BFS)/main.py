@@ -1,9 +1,11 @@
 from Queue import *
 from StateFunctions import *
 
+line = "----------------------------"
+
 def BFS():
 
-    all_paths = Queue([INITIAL_STATE])
+    all_paths = Queue([[INITIAL_STATE]])
     state_space = Queue([INITIAL_STATE])
     goal_paths = list()
     goal_states = list()
@@ -26,7 +28,7 @@ def BFS():
         state_space.enqueue(fringe)
 		# Add path to each fringe state
         for n_state in fringe:
-            new_path = path[:]
+            new_path = list(path[:])
             new_path.append(n_state)
             all_paths.enqueue([new_path])
 
@@ -34,15 +36,21 @@ def BFS():
 
 if __name__ == '__main__':
 	goal_states, goal_paths, explored_states = BFS()
-	print("\nDISTINCT STATES COUNT:", len(explored_states))
-	print("\nGOAL STATES:", goal_state)
-	print("\nEXPLORED STATES:", explored_states)
-	ctr = 1
-	for path in goal_paths:
-		print("\nPATH", ctr)
-		print(INITIAL_STATE)
-		for vertex in path[3:]:
+	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
+	print("\nGOAL STATES COUNT: ", len(goal_states))
+	print("\nGOAL STATES")
+	for state in goal_states:
+		print(state)
+	print("\nEXPLORED STATES")
+	for state in explored_states:
+		print(state)
+	for i in range(len(goal_paths)):
+		print("\nPATH", i+1)
+		print("To reach", goal_paths[i][-1])
+		print(line)
+		for vertex in goal_paths[i][:-1]:
 			print(vertex)
-		ctr += 1
+		print(goal_paths[i][-1], '--> GOAL STATE')
+		print(line)
 
             
