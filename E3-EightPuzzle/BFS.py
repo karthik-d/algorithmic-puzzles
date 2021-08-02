@@ -34,7 +34,7 @@ def search():
 			continue
 		explored_states.add(state)
 		if goal_test(state):
-			return parents 
+			return parents, explored_states 
 		fringe = get_next_states(state)
 		state_space.enqueue(fringe)
 		for new_state in fringe:

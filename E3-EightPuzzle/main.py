@@ -21,19 +21,24 @@ print("Performing Biderictional BFS...")
 total_time = 0
 for i in range(runs):
 	start_time = time.time()
-	conn_state, f_parents, r_parents = BiBFS.search()
+	f_explored_states, r_explored_states, conn_state, f_parents, r_parents = BiBFS.search()
 	total_time += time.time() - start_time
 	# Display the output after the first run
 	# The rest of the runs are used to average the runnning-time
 	if i==0:
 		print("\nSearch Complete. Path obtained is:\n")
-		for state in BiBFS.deduce_path(conn_state, f_parents, r_parents):
+		goal_path, f_depth, r_depth = BiBFS.deduce_path(conn_state, f_parents, r_parents)
+		for state in goal_path:
 			for row in state:
 				print(row)
 			print()
 		print("\nCompleting {} runs of Bidrectional-BFS for run-time averaging...".format(runs))
 BiBFS_time = total_time/runs
+print("\nNo. of Distinct States Explored: ", len(f_explored_states.union(r_explored_states)))
 print("\nTime Taken (avg. of {} runs): {} seconds".format(runs, BiBFS_time))
+print("\nDepth of Goal State: ", f_depth+r_depth+1)
+print("\nDepth of Forward Search: ", f_depth)
+print("\nDepth of Reverse Search: ", r_depth)
 
 
 print("\n"+line)
@@ -41,19 +46,22 @@ print("Performing Traditional BFS...")
 total_time = 0
 for i in range(runs):
 	start_time = time.time()
-	parents = BFS.search()
+	explored_states, parents = BFS.search()
 	total_time += time.time() - start_time
 	# Display the output after the first run
 	# The rest of the runs are used to average the runnning-time
 	if i==0:
 		print("\nSearch Complete. Path Obtained")
-		for state in BFS.deduce_path(GOAL_STATE, parents):
+		goal_path = BFS.deduce_path(GOAL_STATE, parents)
+		for state in goal_path:
 			for row in state:
 				print(row)
 			print()
 		print("\nCompleting {} runs of BFS for run-time averaging...".format(runs))
 BFS_time = total_time/runs
 print("\nTime Taken (avg. of {} runs): {} seconds".format(runs, BFS_time))
+print("\nNo. of Distinct States Explored: ", len(explored_states))
+print("\nDepth of Goal State: ", len(goal_path)-1)
 
 
 print("\n"+line)
