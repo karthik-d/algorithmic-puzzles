@@ -50,7 +50,16 @@ def get_next_states(state):
 	
 	return result
 
+# Checking the next state generation function
 for state in get_next_states(INITIAL_STATE):
 	for row in state:
 		print(row)
 	print()
+	
+
+def is_goal_state(state):
+	for i in range(NUM_ROWS):
+		for j in range(NUM_COLS):
+			if state[i][j] != GOAL_STATE[i][j]:
+				return False 
+	return True			
