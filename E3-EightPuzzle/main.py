@@ -108,6 +108,17 @@ def intersection_test(this_state, that_fringe):
 			return True
 	return False
 
+def deduce_BFS_path(state, parents):
+	
+	def deduce_BFS_path_rec(state, path_seq):
+		this_parent = parents[state]
+		if this_parent is None:
+			return path_seq
+		path_seq = [this_parent] + path_seq[:]
+		return deduce_BFS_path_rec(this_parent, path_seq)
+	
+	return deduce_BFS_path_rec(state, [])
+
 def BFS():
 
 	state_space = Queue([INITIAL_STATE])
@@ -129,6 +140,28 @@ def BFS():
 	
 	return False 
 
+def deduce_BiBFS_path(connecting_state, f_parents, r_parents):
+
+	def deduce_BiBFS_path_rec(f_state, r_state, path_seq):
+		f_parent = f_parents[f_state] if f_state is not None else None
+		r_parent = r_parents[r_state] if r_state is not None else None
+		recurse = False
+		
+		if f_parent is not None:
+			path_seq = [f_parent] + path_seq
+			recurse = True
+		if r_parent is not None:
+			path_seq = path_seq + [r_parent]
+			recurse = True 
+		
+		if recurse:
+			return deduce_BiBFS_path_rec(f_parent, r_parent, path_seq)
+		else:
+			return path_seq
+
+	return deduce_BiBFS_path_rec(connecting_state, connecting_state, [])
+		
+
 
 def bidirectional_BFS():
 
@@ -147,7 +180,7 @@ def bidirectional_BFS():
 			# Explore now
 			f_explored_states.add(f_state)
 			if intersection_test(f_state, r_state_space.get_contents()):
-				return f_state, parents 
+				return f_state, f_parents, r_parents 
 			fringe = get_next_states(f_state)
 			f_state_space.enqueue(fringe)
 			for new_state in fringe:
@@ -160,7 +193,7 @@ def bidirectional_BFS():
 			# Explore now
 			r_explored_states.add(r_state)
 			if intersection_test(r_state, f_state_space.get_contents()):
-				return r_state, parents
+				return r_state, f_parents, r_parents
 			fringe = get_next_states(r_state)
 			r_state_space.enqueue(fringe)
 			for new_state in fringe:
@@ -171,9 +204,13 @@ def bidirectional_BFS():
 
 
 time_ = time.time()
-print(BFS())
+#print(BFS())
 print(time.time()-time_)
 time_ = time.time()
-print(bidirectional_BFS())
+conn_state, f_parents, r_parents = bidirectional_BFS()
+for state in deduce_BiBFS_path(conn_state, f_parents, r_parents):
+	for row in state:
+		print(row)
+	print()
 print(time.time()-time_)
 			
