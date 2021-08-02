@@ -35,10 +35,10 @@ for i in range(runs):
 		print("\nCompleting {} runs of Bidrectional-BFS for run-time averaging...".format(runs))
 BiBFS_time = total_time/runs
 print("\nNo. of Distinct States Explored: ", len(f_explored_states.union(r_explored_states)))
-print("\nTime Taken (avg. of {} runs): {} seconds".format(runs, BiBFS_time))
-print("\nDepth of Goal State: ", f_depth+r_depth+1)
-print("\nDepth of Forward Search: ", f_depth)
-print("\nDepth of Reverse Search: ", r_depth)
+print("Time Taken (avg. of 10 runs): {} seconds".format(runs, BiBFS_time))
+print("Depth of Goal State: ", f_depth+r_depth+1)
+print("Depth of Forward Search: ", f_depth)
+print("Depth of Reverse Search: ", r_depth)
 
 
 print("\n"+line)
@@ -59,9 +59,9 @@ for i in range(runs):
 			print()
 		print("\nCompleting {} runs of BFS for run-time averaging...".format(runs))
 BFS_time = total_time/runs
-print("\nTime Taken (avg. of {} runs): {} seconds".format(runs, BFS_time))
-print("\nNo. of Distinct States Explored: ", len(explored_states))
-print("\nDepth of Goal State: ", len(goal_path)-1)
+print("\nTime Taken (avg. of 10 runs): {} seconds".format(runs, BFS_time))
+print("No. of Distinct States Explored: ", len(explored_states))
+print("Depth of Goal State: ", len(goal_path)-1)
 
 
 print("\n"+line)
