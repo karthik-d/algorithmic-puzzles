@@ -109,29 +109,36 @@ def intersection_test(this_state, that_fringe):
 	return False
 
 def BFS():
-	f_state_space = Queue([INITIAL_STATE])
-	f_explored_states = set()
 
-	while(not f_state_space.is_empty()):
-		# Forward Search
-		f_state = f_state_space.dequeue()
-		if f_state not in f_explored_states:
-			# Explore now
-			f_explored_states.add(f_state)
-			if is_goal_state(f_state):
-				return f_state 
-			fringe = get_next_states(f_state)
-			f_state_space.enqueue(fringe)
+	state_space = Queue([INITIAL_STATE])
+	explored_states = set()
+	parents = {INITIAL_STATE: None}
+
+	while(not state_space.is_empty()):
+		state = state_space.dequeue()
+		if state in explored_states:
+			continue
+		explored_states.add(state)
+		if is_goal_state(state):
+			return parents 
+		fringe = get_next_states(state)
+		state_space.enqueue(fringe)
+		for new_state in fringe:
+			if new_state not in parents:
+				parents[new_state] = state
 	
 	return False 
+
 
 def bidirectional_BFS():
 
 	f_state_space = Queue([INITIAL_STATE])
 	f_explored_states = set()
+	f_parents = {INITIAL_STATE: None}
 
 	r_state_space = Queue([GOAL_STATE])
 	r_explored_states = set()
+	r_parents = {GOAL_STATE: None}
 
 	while(not f_state_space.is_empty() or not r_state_space.is_empty()):
 		# Forward Search
@@ -140,9 +147,12 @@ def bidirectional_BFS():
 			# Explore now
 			f_explored_states.add(f_state)
 			if intersection_test(f_state, r_state_space.get_contents()):
-				return f_state 
+				return f_state, parents 
 			fringe = get_next_states(f_state)
 			f_state_space.enqueue(fringe)
+			for new_state in fringe:
+				if new_state not in f_parents:
+					f_parents[new_state] = f_state
 
 		# Reverse Search
 		r_state = r_state_space.dequeue()
@@ -150,11 +160,15 @@ def bidirectional_BFS():
 			# Explore now
 			r_explored_states.add(r_state)
 			if intersection_test(r_state, f_state_space.get_contents()):
-				return r_state 
+				return r_state, parents
 			fringe = get_next_states(r_state)
 			r_state_space.enqueue(fringe)
+			for new_state in fringe:
+				if new_state not in r_parents:
+					r_parents[new_state] = r_state
 	
 	return False 
+
 
 time_ = time.time()
 print(BFS())
