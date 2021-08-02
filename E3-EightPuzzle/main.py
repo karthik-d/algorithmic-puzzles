@@ -108,9 +108,22 @@ def intersection_test(this_state, that_fringe):
 			return True
 	return False
 
+def BFS():
+	f_state_space = Queue([INITIAL_STATE])
+	f_explored_states = set()
 
-
-
+	while(not f_state_space.is_empty()):
+		# Forward Search
+		f_state = f_state_space.dequeue()
+		if f_state not in f_explored_states:
+			# Explore now
+			f_explored_states.add(f_state)
+			if is_goal_state(f_state):
+				return f_state 
+			fringe = get_next_states(f_state)
+			f_state_space.enqueue(fringe)
+	
+	return False 
 
 def bidirectional_BFS():
 
