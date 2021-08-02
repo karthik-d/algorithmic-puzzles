@@ -55,7 +55,7 @@ for state in get_next_states(INITIAL_STATE):
 	for row in state:
 		print(row)
 	print()
-	
+
 
 def is_goal_state(state):
 	for i in range(NUM_ROWS):
@@ -63,3 +63,21 @@ def is_goal_state(state):
 			if state[i][j] != GOAL_STATE[i][j]:
 				return False 
 	return True			
+
+# Compare the current state of `this` direction search
+# to the fringe states of `that` direction search
+def intersection_test(this_state, that_fringe):
+	
+	def are_states_same(state_A, state_B):
+		for i in range(NUM_ROWS):
+			for j in range(NUM_COLS):
+				if state_A[i][j] != state_B[i][j]:
+					return False 
+		return True 
+	
+	for state in that_fringe:
+		if are_states_same(state, this_state):
+			return True
+	return False
+
+	
