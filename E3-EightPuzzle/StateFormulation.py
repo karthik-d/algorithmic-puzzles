@@ -50,12 +50,13 @@ def get_next_states(state):
 	
 	return result
 
+'''
 # Checking the next state generation function
 for state in get_next_states(INITIAL_STATE):
 	for row in state:
 		print(row)
 	print()
-
+'''
 
 def goal_test(state):
 	for i in range(NUM_ROWS):
