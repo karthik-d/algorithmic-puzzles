@@ -95,7 +95,7 @@ def DepthLimited(limit):
 
 if __name__ == '__main__':
 
-	print("\n"+line)
+	print(" \n"+line)
 	print("DEPTH First Search")
 	goal_states, explored_states, parents = DFS()
 
