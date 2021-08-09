@@ -47,6 +47,10 @@ def DFS():
 	return goal_states, explored_states, parents 
 
 
+
+
+
+
 if __name__ == '__main__':
 
 	goal_states, explored_states, parents = DFS()
