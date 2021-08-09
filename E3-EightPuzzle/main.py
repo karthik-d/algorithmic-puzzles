@@ -63,8 +63,6 @@ print("\nTime Taken (avg. of 10 runs): {} seconds".format(runs, BFS_time))
 print("No. of Distinct States Explored: ", len(explored_states))
 print("Depth of Goal State: ", len(goal_path)-1)
 
-
 print("\n"+line)
 print("Time taken by traditional BFS: {} seconds".format(BFS_time))
 print("Time taken by bidirectional BFS: {} seconds".format(BiBFS_time))
-
