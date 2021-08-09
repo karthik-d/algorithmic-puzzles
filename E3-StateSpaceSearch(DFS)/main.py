@@ -70,6 +70,8 @@ def DepthLimited(limit):
 		# Skip iteration if state already explored
 		if state in explored_states:
 			continue
+		if curr_depth > limit:
+			continue
 		explored_states.add(state)
 		# Check if the state is a goal-state
 		if is_goal_state(state):
@@ -93,8 +95,9 @@ def DepthLimited(limit):
 
 if __name__ == '__main__':
 
+	print("\n"+line)
+	print("DEPTH First Search")
 	goal_states, explored_states, parents = DFS()
-	print(parents)
 
 	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
 
@@ -116,8 +119,27 @@ if __name__ == '__main__':
 		print("\n".join(map(str, deduce_path(state, parents))))
 		print(state, '--> GOAL STATE')
 
-	
-	goal_states, explored_states, parents, depths = DepthLimited(10)
+
+	depth_limit = 7
+	print("\n"+line)
+	print("DEPTH-LIMITED Search (limit: {})".format(depth_limit))
+	goal_states, explored_states, parents, depths = DepthLimited(depth_limit)
+
+	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
+
+	print("\nGOAL STATES COUNT: ", len(goal_states))
+
+	print("\nINITIAL STATE")
+	print(INITIAL_STATE)
+
+	print("\nGOAL STATES")
+	for state in goal_states:
+		print(state)
+
+	print("\nEXPLORED STATES")
+	for state in explored_states:
+		print(state)
+
 	for state in goal_states:
 		print("\nPATH to reach", state)
 		print("\n".join(make_path_string(deduce_path(state, parents), depths)))
