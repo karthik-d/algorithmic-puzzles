@@ -26,104 +26,61 @@ def make_path_string(path, depths):
 	return string_path
 
 
-def DFS():
+def IterativeDeepening(num_solns_reqd):
 
-	state_space = Stack([INITIAL_STATE])
-	goal_states = list()
-	explored_states = set()
-	parents = {INITIAL_STATE: None}
+	def SearchDepth():
 
-	while not state_space.is_empty():
-		# Get next state and its path
-		state = state_space.pop()
-		# Skip iteration if state already explored
-		if state in explored_states:
-			continue
-		explored_states.add(state)
-		# Check if the state is a goal-state
-		if is_goal_state(state):
-			goal_states.append(state)
-		# Find the next states
-		fringe = get_next_states(state)
-		state_space.push(fringe)
-		# Add parent of each fringe state, if not already added
-		for new_state in fringe:
-			if new_state not in parents:
-				parents[new_state] = state 
+		state_space = Stack([INITIAL_STATE])
+		depth_track = Stack([0])
+		goal_states = list()
+		explored_states = set()
+		parents = {INITIAL_STATE: None}
+		depths = {INITIAL_STATE: 0}
 
-	return goal_states, explored_states, parents 
+		while not state_space.is_empty():
+			# Get next state and its path
+			state = state_space.pop()
+			curr_depth = depth_track.pop()
+			# Skip iteration if state already explored
+			if state in explored_states:
+				continue
+			if curr_depth > limit:
+				continue
+			explored_states.add(state)
+			# Check if the state is a goal-state
+			if is_goal_state(state):
+				goal_states.append(state)
+			# Find the next states
+			fringe = get_next_states(state)
+			state_space.push(fringe)
+			# Add parent and depth of each fringe state, if not already added
+			fringe_depths_list = list()
+			for new_state in fringe:
+				if new_state not in parents:
+					parents[new_state] = state 
+					depths[new_state] = curr_depth+1
+					fringe_depths_list.append(curr_depth+1)
+				else:
+					fringe_depths_list.append(depths[new_state])
+			depth_track.push(fringe_depths_list)
 
+		return goal_states, explored_states, parents, depths
 
-def DepthLimited(limit):
-
-	state_space = Stack([INITIAL_STATE])
-	depth_track = Stack([0])
-	goal_states = list()
-	explored_states = set()
-	parents = {INITIAL_STATE: None}
-	depths = {INITIAL_STATE: 0}
-
-	while not state_space.is_empty():
-		# Get next state and its path
-		state = state_space.pop()
-		curr_depth = depth_track.pop()
-		# Skip iteration if state already explored
-		if state in explored_states:
-			continue
-		if curr_depth > limit:
-			continue
-		explored_states.add(state)
-		# Check if the state is a goal-state
-		if is_goal_state(state):
-			goal_states.append(state)
-		# Find the next states
-		fringe = get_next_states(state)
-		state_space.push(fringe)
-		# Add parent and depth of each fringe state, if not already added
-		fringe_depths_list = list()
-		for new_state in fringe:
-			if new_state not in parents:
-				parents[new_state] = state 
-				depths[new_state] = curr_depth+1
-				fringe_depths_list.append(curr_depth+1)
-			else:
-				fringe_depths_list.append(depths[new_state])
-		depth_track.push(fringe_depths_list)
-
-	return goal_states, explored_states, parents, depths 
+	limit = -1
+	num_solns = 0
+	while(num_solns<num_solns_reqd):
+		limit += 1
+		goal_states, explored_states, parents, depths = SearchDepth()
+		num_solns = len(goal_states)
+		print("{num_solns} solutions found with depth limit {limit}".format(num_solns=num_solns, limit=limit))
+	return goal_states, explored_states, parents, depths
 
 
 if __name__ == '__main__':
 
-	print(" \n"+line)
-	print("DEPTH First Search")
-	goal_states, explored_states, parents = DFS()
-
-	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
-
-	print("\nGOAL STATES COUNT: ", len(goal_states))
-
-	print("\nINITIAL STATE")
-	print(INITIAL_STATE)
-
-	print("\nGOAL STATES")
-	for state in goal_states:
-		print(state)
-
-	print("\nEXPLORED STATES")
-	for state in explored_states:
-		print(state)
-
-	for state in goal_states:
-		print("\nPATH to reach", state)
-		print("\n".join(map(str, deduce_path(state, parents))))
-		print(state, '--> GOAL STATE')
-
-
-	depth_limit = 7
 	print("\n"+line)
-	print("DEPTH-LIMITED Search (limit: {})".format(depth_limit))
-	goal_states, explored_states, parents, depths = DepthLimited(depth_limit)
+	print("ITERATIVE DEEPENING Search\n")
+	goal_states, explored_states, parents, depths = IterativeDeepening(3)
 
 	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
 
