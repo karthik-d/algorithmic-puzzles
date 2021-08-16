@@ -34,9 +34,34 @@ if __name__ == '__main__':
 		print(state, '--> GOAL STATE')
 
 	# Bidirectional Search
-	results = BidirectionalBFS.search()
-	for result in results:
-		printf("To Reach GF")
+	print("\n"+line)
+	print("BIDIRECTIONAL Search\n")
+	
+	print("INITIAL STATE")
+	print(INITIAL_STATE)
+	results = BidirectionalBFS.search(GOAL_STATES)
+	for goal_state in results:
+		# Unpack result parameters
+		f_explored_states, r_explored_states, conn_state, f_parents, r_parents = results[goal_state]
+		print("\n"+line)
+		print("For GOAL STATE", goal_state)
+		
+		explored_states = f_explored_states.union(r_explored_states)
+		print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
+		print("\nEXPLORED STATES")
+		for state in explored_states:
+			print(state)
+		
+		print("\nPATH TAKEN")
+		goal_path, f_depth, r_depth = BidirectionalBFS.deduce_path(conn_state, f_parents, r_parents)
+		for state in goal_path:
+			if(state==conn_state):
+				print(state, '--> CONNECTING STATE')
+			elif(state==goal_state):
+				print(state, '--> GOAL STATE')
+			else:
+				print(state)
+
 		
 
             

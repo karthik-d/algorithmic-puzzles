@@ -23,7 +23,7 @@ def deduce_path(connecting_state, f_parents, r_parents):
 		else:
 			return path_seq, f_depth, r_depth
 
-	return deduce_path_rec(connecting_state, connecting_state, [], 0, 0)
+	return deduce_path_rec(connecting_state, connecting_state, [connecting_state], 0, 0)
 
 
 def search(goal_states):
@@ -73,5 +73,5 @@ def search(goal_states):
 		if not result:
 			continue
 		results[goal] = result 
-	return result
+	return results
 		
