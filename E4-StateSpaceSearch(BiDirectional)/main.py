@@ -1,5 +1,5 @@
 from IterativeDeepening import *
-from StateFunctions import *
+from StateFormulation import *
 
 
 line = "----------------------------"

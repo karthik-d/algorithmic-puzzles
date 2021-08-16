@@ -1,5 +1,5 @@
 from Stack import *
-from StateFunctions import *
+from StateFormulation import *
 
 def deduce_path(state, parents):
 	
