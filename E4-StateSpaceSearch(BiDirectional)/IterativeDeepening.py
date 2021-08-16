@@ -22,9 +22,9 @@ def make_path_string(path, depths):
 	return string_path
 
 
-def IterativeDeepening(num_solns_reqd):
+def search(num_solns_reqd):
 
-	def SearchDepth():
+	def search_depth():
 
 		state_space = Stack([INITIAL_STATE])
 		depth_track = Stack([0])
@@ -66,7 +66,7 @@ def IterativeDeepening(num_solns_reqd):
 	num_solns = 0
 	while(num_solns<num_solns_reqd):
 		limit += 1
-		goal_states, explored_states, parents, depths = SearchDepth()
+		goal_states, explored_states, parents, depths = search_depth()
 		num_solns = len(goal_states)
 		print("{num_solns} solutions found with depth limit {limit}".format(num_solns=num_solns, limit=limit))
 	return goal_states, explored_states, parents, depths

@@ -1,4 +1,5 @@
-from IterativeDeepening import *
+import IterativeDeepening
+import BidirectionalBFS
 from StateFormulation import *
 
 
@@ -10,7 +11,7 @@ if __name__ == '__main__':
 	num_expected_solns = 3
 	print("\n"+line)
 	print("ITERATIVE DEEPENING Search\n")
-	goal_states, explored_states, parents, depths = IterativeDeepening(num_expected_solns)
+	goal_states, explored_states, parents, depths = IterativeDeepening.search(num_expected_solns)
 
 	print("\nDISTINCT EXPLORED STATES COUNT: ", len(explored_states))
 
@@ -29,8 +30,13 @@ if __name__ == '__main__':
 
 	for state in goal_states:
 		print("\nPATH to reach", state)
-		print("\n".join(make_path_string(deduce_path(state, parents), depths)))
+		print("\n".join(IterativeDeepening.make_path_string(IterativeDeepening.deduce_path(state, parents), depths)))
 		print(state, '--> GOAL STATE')
+
+	# Bidirectional Search
+	results = BidirectionalBFS.search()
+	for result in results:
+		printf("To Reach GF")
 		
 
             

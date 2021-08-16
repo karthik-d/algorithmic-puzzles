@@ -3,6 +3,7 @@
 CAPACITY = (8,5,3)
 NUM_JUGS = 3
 INITIAL_STATE = (8,0,0)
+GOAL_STATES = [(4,1,3), (4,4,0), (1,4,3)]
 
 def get_next_states(state):
 
@@ -40,3 +41,18 @@ def get_next_states(state):
 
 def is_goal_state(state):
     return 4 in state
+
+# Compare the current state of `this` direction search
+# to the fringe states of `that` direction search
+def intersection_test(this_state, that_fringe):
+	
+	def are_states_same(state_A, state_B):
+		for i in range(NUM_JUGS):
+			if(state_A[i]!=state_B[i]):
+				return False 
+		return True
+	
+	for state in that_fringe:
+		if are_states_same(state, this_state):
+			return True
+	return False
