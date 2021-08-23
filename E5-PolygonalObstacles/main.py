@@ -21,10 +21,14 @@ class Vector:
 		self.x = destn.x - src.x
 		self.y = destn.y - src.y
 		self.quadrant = self.get_quadrant()
+		self.direction = self.get_direction()
 
 	def get_direction(self):
 		# By defn, theta of vector wrt x-axis
+		# Set offset as per quadrant
 		offset = pi if self.quadrant in (1,4) else: 0
+		# Adjust offset to get results in range [0,2*pi)
+		offset += 0.5*pi
 		if self.x==0:
 			# Attach sign of y to infinity
 			tan_theta = inf*(self.y) 
@@ -43,6 +47,9 @@ class Vector:
 				return 2
 			else:
 				return 3
+
+	def relative_direction(self, other_vector):
+		return self.direction - other_vector.direction
 
 	def is_zero_vector(self):
 		return self.x == 0 and self.y==0
@@ -89,18 +96,20 @@ def get_orientation(three_pt_sequence):
 	# Returns the orientation of a sequence of three points
 	# 0: Collinear, -1: Clockwise, +1: Anti-Clockwise
 	pt1, pt2, pt3 = three_pt_sequence
-	if pt1==pt2 or pt2==pt3 or pt3==pt1:
+	vector_1 = Vector(pt1, pt2)
+	vector_2 = Vector(pt2, pt3)
+	# Check if adjacent points are equal
+	if vector_1.is_zero_vector() or vector_2.is_zero_vector():
 		return 0
-	slope_1 = pt1.slope(pt2)
-	slope_2 = pt2.slope(pt3)
-	print(slope_1, slope_2)
-	# Evaluate slope change
-	change = slope_1 - slope_2
-	if change<0:
+	# Find angle between vectors
+	relative_direction =  vector_2.get_relative_direction(vector_1)
+	# Determine orientation
+	if relative_direction < pi:
 		return -1
-	if change>0:
+	elif relative_direction > pi:
 		return 1
-	return 0
+	else:
+		return 0
 
 
 class StateSpace:
