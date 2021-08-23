@@ -16,11 +16,13 @@ class Point:
 	def __eq__(self, other_pt):
 		return self.x == other_pt.x and self.y==other_pt.y
 
+	def __str__(self):
+		return '({x},{y})'.format(x=self.x, y=self.y)
+
 
 class Polygon:
 
 	def __init__(self, vertices):
-		print(vertices)
 		self.vertices = [ Point(vertex) for vertex in vertices ]
 		self.edges = self.find_edges()
 		
@@ -36,15 +38,15 @@ class Polygon:
 def segments_intersect(seg_1, seg_2):
 	# Check if seg_1 intersects/touches seg_2
 	# If the orientation of seg_1 wrt either ends of seg_2 are different, they intersect/touch
-	if get_orientation(seg_1[0], seg_1[1], seg_2[0]) == get_orientation(seg_1[0], seg_1[1], seg_2[1]):
+	if get_orientation((seg_1[0], seg_1[1], seg_2[0])) == get_orientation((seg_1[0], seg_1[1], seg_2[1])):
 		return False
 	# Check if seg_2 intersects/touches seg_1
-	if get_orientation(seg_2[0], seg_2[1], seg_1[0]) == get_orientation(seg_2[0], seg_2[1], seg_1[1]):
+	if get_orientation((seg_2[0], seg_2[1], seg_1[0])) == get_orientation((seg_2[0], seg_2[1], seg_1[1])):
 		return False
 	return True
 
 
-def get_orientation(thee_pt_sequence):
+def get_orientation(three_pt_sequence):
 	# Returns the orientation of a sequence of three points
 	# 0: Collinear, -1: Clockwise, +1: Anti-Clockwise
 	pt1, pt2, pt3 = three_pt_sequence
@@ -115,7 +117,7 @@ class StateSpace:
 						if state in ( self.curr_polygon.vertices[(i+1)%num_vertices], self.curr_polygon.vertices[i-1] ):
 							next_states.append(state)
 							continue
-			if self.is_reachable(state, curr_state):
+			if self.is_reachable(state, self.curr_state):
 				next_states.append(state)
 		return next_states
 
@@ -131,4 +133,5 @@ state_space = StateSpace(
 	obstacles = polygons
 )
 
-print(state_space.get_next_states())
+for point in state_space.get_next_states():
+	print(point)
