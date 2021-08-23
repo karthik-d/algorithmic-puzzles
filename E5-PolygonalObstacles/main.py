@@ -37,11 +37,7 @@ class Vector:
 		else:
 			tan_theta = atan(self.y/self.x) 
 		direction = offset + atan(tan_theta)
-		# Return direction shifted from [-90,270] to [0,360]
-		if direction < 0:
-			return direction + (2*pi)
-		else:
-			return direction
+		return Vector.normalize_angle(direction)
 
 	def get_quadrant(self):
 		if self.x>=0:
@@ -56,10 +52,17 @@ class Vector:
 				return 3
 
 	def get_relative_direction(self, other_vector):
-		return self.direction - other_vector.direction
+		return Vector.normalize_angle(self.direction - other_vector.direction)
 
 	def is_zero_vector(self):
 		return self.x == 0 and self.y==0
+
+	@classmethod
+	def normalize_angle(cls, angle):
+		# Return angle in rannge [0,360]
+		while angle<0:
+			angle += 2*pi 
+		return angle
 
 
 class Polygon:
@@ -95,9 +98,6 @@ def segments_intersect(seg_1, seg_2):
 	# Check if seg_2 intersects/touches seg_1
 	orient21_1 = get_orientation((seg_2[0], seg_2[1], seg_1[0]))
 	orient21_2 = get_orientation((seg_2[0], seg_2[1], seg_1[1]))
-	print(seg_2[0], seg_2[1], seg_1[0])
-	print(seg_2[0], seg_2[1], seg_1[1])
-	print(orient21_1, orient21_2)
 	if (not any([orient21_1, orient21_2])) or orient21_1==orient21_2:
 		return False
 	return True
@@ -133,8 +133,8 @@ class StateSpace:
 		self.poly_edges = self.get_poly_edges()
 		self.states = [self.start, self.end] + self.get_poly_vertices()
 		# Current State Representation
-		self.curr_state = self.start 
-		self.curr_polygon = None  
+		self.curr_state = Point((4,3))
+		self.curr_polygon = Polygon([(1,1), (1,3), (4,3), (4,1)])
 		# Store the polygon of current state 
 
 	def get_poly_vertices(self):
@@ -156,11 +156,6 @@ class StateSpace:
 		# Check if the path from src to destn intersects any other edge
 		path = (src, destn)
 		for edge in self.poly_edges:
-			#print(" - ".join(map(str, edge)))
-			print(" - ".join(map(str, path)))
-			print(" - ".join(map(str, edge)))
-			print(segments_intersect(edge, path))
-			print()
 			if segments_intersect(edge, path):
 				return False
 		return True
@@ -171,12 +166,13 @@ class StateSpace:
 		#     Or: 2. Non-obstructing path to vertex of other polygon
 		next_states = []
 		for state in self.states:
-			print(state)
-			print("---------------------------")
+			# Check if state is same as current
 			if state == self.curr_state:
 				continue 
+			# Skip if state is visited
 			if state in visited:
 				continue 
+			# Case: State part of same polygon (grazing allowed)
 			if self.curr_polygon and (state in self.curr_polygon.vertices):
 				# Allow if it is an adjacent vertex
 				num_vertices = len(self.curr_polygon.vertices)
@@ -185,7 +181,8 @@ class StateSpace:
 						# Check if state is previous or next vertex
 						if state in ( self.curr_polygon.vertices[(i+1)%num_vertices], self.curr_polygon.vertices[i-1] ):
 							next_states.append(state)
-							continue
+				continue
+			# Case: State not part of same polygon
 			if self.is_reachable(state, self.curr_state):
 				next_states.append(state)
 		return next_states
