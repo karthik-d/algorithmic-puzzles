@@ -1,8 +1,17 @@
+from numpy import inf
+
 class Point:
 	
 	def __init__(self, point):
 		self.x = point[0]
 		self.y = point[1]
+
+	def slope(self, other_pt):
+		horizontal = self.x - other_pt.x
+		if horizontal==0:
+			return inf
+		vertical = self.y - other_pt.y
+		return vertical/horizontal
 
 	def __eq__(self, other_pt):
 		return self.x == other_pt.x and self.y==other_pt.y
@@ -25,6 +34,14 @@ class Polygon:
 
 def segments_intersect(seg_1, seg_2):
 	pass
+
+
+def get_orientation(thee_pt_sequence):
+	# Returns the orientation of a sequence of three points
+	# 0: Collinear, -ve: Clockwise, +ve:Anti-Clockwise
+	slope_1 = pt1.slope(pt2)
+	slope_2 = pt2.slope(pt3)
+	return slope_1 - slope_2
 
 
 class StateSpace:
