@@ -2,9 +2,9 @@ from numpy import inf
 
 class Point:
 	
-	def __init__(self, point):
-		self.x = point[0]
-		self.y = point[1]
+	def __init__(self, coords):
+		self.x = coords[0]
+		self.y = coords[1]
 
 	def slope(self, other_pt):
 		horizontal = self.x - other_pt.x
@@ -110,3 +110,14 @@ class StateSpace:
 				next_states.append(state)
 		return next_states
 
+
+polygons = [
+	Polygon((1,1), (1,3), (4,3), (4,1)),
+	Polygon((5,2), (6,4), (4,5))
+]
+
+state_space = StateSpace(
+	start = (0,0),
+	end = (6,5),
+	obstacles = polygons
+)
