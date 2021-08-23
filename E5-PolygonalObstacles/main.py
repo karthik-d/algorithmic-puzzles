@@ -1,5 +1,5 @@
 from numpy import inf
-from math import pi, atan
+from math import pi, atan, degrees
 
 class Point:
 	
@@ -12,6 +12,10 @@ class Point:
 
 	def __str__(self):
 		return '({x},{y})'.format(x=self.x, y=self.y)
+
+	def __hash__(self):
+		# Represent Point as a 'tuple' and use tuple's hash function
+		return hash((self.x, self.y))
 
 
 class Vector:
@@ -26,15 +30,18 @@ class Vector:
 	def get_direction(self):
 		# By defn, theta of vector wrt x-axis
 		# Set offset as per quadrant
-		offset = pi if self.quadrant in (1,4) else: 0
-		# Adjust offset to get results in range [0,2*pi)
-		offset += 0.5*pi
+		offset = pi if self.quadrant in (2,3) else 0
 		if self.x==0:
 			# Attach sign of y to infinity
 			tan_theta = inf*(self.y) 
 		else:
 			tan_theta = atan(self.y/self.x) 
-		return offset + atan(tan_theta)
+		direction = offset + atan(tan_theta)
+		# Return direction shifted from [-90,270] to [0,360]
+		if direction < 0:
+			return direction + (2*pi)
+		else:
+			return direction
 
 	def get_quadrant(self):
 		if self.x>=0:
@@ -48,7 +55,7 @@ class Vector:
 			else:
 				return 3
 
-	def relative_direction(self, other_vector):
+	def get_relative_direction(self, other_vector):
 		return self.direction - other_vector.direction
 
 	def is_zero_vector(self):
@@ -70,16 +77,20 @@ class Polygon:
 		return edges
 
 
+def has_duplicates(points):
+	return len(set(points))!=len(points)
+
+
 def segments_intersect(seg_1, seg_2):
+	# If any of the points are repeated, they touch => No obstruction
+	if has_duplicates(seg_1+seg_2):
+		return False
 	# Check if seg_1 intersects/touches seg_2
-	# If the orientation of seg_1 wrt either ends of seg_2 are different (or one is collinear), they intersect/touch
+	# If the orientation of seg_1 wrt either ends of seg_2 are different (or one is collinear), they intersect
 	orient12_1 = get_orientation((seg_1[0], seg_1[1], seg_2[0]))
 	orient12_2 = get_orientation((seg_1[0], seg_1[1], seg_2[1]))
-	print(seg_1[0], seg_1[1], seg_2[0])
-	print(seg_1[0], seg_1[1], seg_2[1])
-	print(orient12_1, orient12_2)
 	# (not any([orient12_1, orient12_2])) ==> Check if one of them is 0
-	if orient12_1==orient12_2:
+	if (not any([orient12_1, orient12_2])) or orient12_1==orient12_2:
 		return False
 	# Check if seg_2 intersects/touches seg_1
 	orient21_1 = get_orientation((seg_2[0], seg_2[1], seg_1[0]))
@@ -87,7 +98,7 @@ def segments_intersect(seg_1, seg_2):
 	print(seg_2[0], seg_2[1], seg_1[0])
 	print(seg_2[0], seg_2[1], seg_1[1])
 	print(orient21_1, orient21_2)
-	if orient21_1==orient21_2:
+	if (not any([orient21_1, orient21_2])) or orient21_1==orient21_2:
 		return False
 	return True
 
@@ -98,7 +109,7 @@ def get_orientation(three_pt_sequence):
 	pt1, pt2, pt3 = three_pt_sequence
 	vector_1 = Vector(pt1, pt2)
 	vector_2 = Vector(pt2, pt3)
-	# Check if adjacent points are equal
+	# Check if adjacent points are same - Direction can't be found
 	if vector_1.is_zero_vector() or vector_2.is_zero_vector():
 		return 0
 	# Find angle between vectors
@@ -160,6 +171,8 @@ class StateSpace:
 		#     Or: 2. Non-obstructing path to vertex of other polygon
 		next_states = []
 		for state in self.states:
+			print(state)
+			print("---------------------------")
 			if state == self.curr_state:
 				continue 
 			if state in visited:
@@ -197,17 +210,17 @@ for state in state_space.states:
 	print(state)
 print()
 """
-"""
+
 for point in state_space.get_next_states():
 	print(point)
-"""
+
 """
 # Intersection Test Cases
 seg1 = ( Point([0,0]), Point([4,3]) )
 seg2 = ( Point([1,1]), Point([4,1]) )
 print(segments_intersect(seg1, seg2))
-"""
+#
 seg1 = ( Point([0,0]), Point([6,5]) )
 seg2 = ( Point([1,3]), Point([4,3]) )
 print(segments_intersect(seg1, seg2))
-#"""
+"""
