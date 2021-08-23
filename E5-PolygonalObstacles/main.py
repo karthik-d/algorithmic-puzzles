@@ -33,15 +33,29 @@ class Polygon:
 
 
 def segments_intersect(seg_1, seg_2):
-	pass
+	# Check if seg_1 intersects/touches seg_2
+	# If the orientation of seg_1 wrt either ends of seg_2 are different, they intersect/touch
+	if get_orientation(seg_1[0], seg_1[1], seg_2[0]) == get_orientation(seg_1[0], seg_1[1], seg_2[1]):
+		return False
+	# Check if seg_2 intersects/touches seg_1
+	if get_orientation(seg_2[0], seg_2[1], seg_1[0]) == get_orientation(seg_2[0], seg_2[1], seg_1[1]):
+		return False
+	return True
 
 
 def get_orientation(thee_pt_sequence):
 	# Returns the orientation of a sequence of three points
-	# 0: Collinear, -ve: Clockwise, +ve:Anti-Clockwise
+	# 0: Collinear, -1: Clockwise, +1: Anti-Clockwise
+	pt1, pt2, pt3 = three_pt_sequence
 	slope_1 = pt1.slope(pt2)
 	slope_2 = pt2.slope(pt3)
-	return slope_1 - slope_2
+	# Evaluate slope change
+	change = slope_1 - slope_2
+	if change<0:
+		return -1
+	if change>0:
+		return 1
+	return 0
 
 
 class StateSpace:
