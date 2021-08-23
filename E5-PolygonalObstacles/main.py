@@ -67,10 +67,18 @@ class StateSpace:
 		self.end = Point(end)
 		self.obstacles = obstacles
 		self.poly_edges = self.get_poly_edges()
+		self.states = [self.start, self.end] + self.get_poly_vertices()
 		# Current State Representation
 		self.curr_state = self.start 
 		self.curr_polygon = None  
 		# Store the polygon of current state 
+
+	def get_poly_vertices(self):
+		# Poly_Edges is the set of all edges of the obstacles in the state space
+		vertices = []
+		for polygon in self.obstacles:
+			vertices.extend(polygon.vertices)
+		return vertices
 
 	def get_poly_edges(self):
 		# Poly_Edges is the set of all edges of the obstacles in the state space
@@ -96,9 +104,9 @@ class StateSpace:
 		for state in self.states:
 			if state == self.curr_state:
 				continue 
-			if state in visted:
+			if state in visited:
 				continue 
-			if state in self.curr_polygon.vertices:
+			if self.curr_polygon and (state in self.curr_polygon.vertices):
 				# Allow if it is an adjacent vertex
 				num_vertices = len(self.curr_polygon.vertices)
 				for i in range(num_vertices):
@@ -107,7 +115,7 @@ class StateSpace:
 						if state in ( self.curr_polygon.vertices[(i+1)%num_vertices], self.curr_polygon.vertices[i-1] ):
 							next_states.append(state)
 							continue
-			if is_reachable(state, curr_state):
+			if self.is_reachable(state, curr_state):
 				next_states.append(state)
 		return next_states
 
@@ -122,3 +130,5 @@ state_space = StateSpace(
 	end = (6,5),
 	obstacles = polygons
 )
+
+print(state_space.get_next_states())
