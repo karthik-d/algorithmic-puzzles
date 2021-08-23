@@ -8,10 +8,12 @@ class Point:
 
 	def slope(self, other_pt):
 		horizontal = self.x - other_pt.x
-		if horizontal==0:
-			return inf
 		vertical = self.y - other_pt.y
-		return vertical/horizontal
+		if horizontal==0:
+			# Attach correct sign to infinity
+			return inf*vertical
+		else:
+			return vertical/horizontal
 
 	def __eq__(self, other_pt):
 		return self.x == other_pt.x and self.y==other_pt.y
@@ -31,17 +33,22 @@ class Polygon:
 		edges = []
 		for i in range(len(self.vertices)-1):
 			edges.append((self.vertices[i], self.vertices[i+1]))
-		edges.append((self.vertices[0], self.vertices[-1]))
+		edges.append((self.vertices[-1], self.vertices[0]))
 		return edges
 
 
 def segments_intersect(seg_1, seg_2):
 	# Check if seg_1 intersects/touches seg_2
-	# If the orientation of seg_1 wrt either ends of seg_2 are different, they intersect/touch
-	if get_orientation((seg_1[0], seg_1[1], seg_2[0])) == get_orientation((seg_1[0], seg_1[1], seg_2[1])):
+	# If the orientation of seg_1 wrt either ends of seg_2 are different (or one is collinear), they intersect/touch
+	orient12_1 = get_orientation((seg_1[0], seg_1[1], seg_2[0]))
+	orient12_2 = get_orientation((seg_1[0], seg_1[1], seg_2[1]))
+	# (not any([orient12_1, orient12_2])) ==> Check if one of them is 0
+	if orient12_1==orient12_2:
 		return False
 	# Check if seg_2 intersects/touches seg_1
-	if get_orientation((seg_2[0], seg_2[1], seg_1[0])) == get_orientation((seg_2[0], seg_2[1], seg_1[1])):
+	orient21_1 = get_orientation((seg_2[0], seg_2[1], seg_1[0]))
+	orient21_2 = get_orientation((seg_2[0], seg_2[1], seg_1[1]))
+	if orient21_1==orient21_2:
 		return False
 	return True
 
@@ -52,6 +59,7 @@ def get_orientation(three_pt_sequence):
 	pt1, pt2, pt3 = three_pt_sequence
 	slope_1 = pt1.slope(pt2)
 	slope_2 = pt2.slope(pt3)
+	print(slope_1, slope_2)
 	# Evaluate slope change
 	change = slope_1 - slope_2
 	if change<0:
@@ -94,6 +102,11 @@ class StateSpace:
 		# Check if the path from src to destn intersects any other edge
 		path = (src, destn)
 		for edge in self.poly_edges:
+			#print(" - ".join(map(str, edge)))
+			print(" - ".join(map(str, path)))
+			print(" - ".join(map(str, edge)))
+			print(segments_intersect(edge, path))
+			print()
 			if segments_intersect(edge, path):
 				return False
 		return True
@@ -133,5 +146,21 @@ state_space = StateSpace(
 	obstacles = polygons
 )
 
+"""
+for edge in state_space.poly_edges:
+	print(" - ".join(map(str, edge)))
+print()
+for state in state_space.states:
+	print(state)
+print()
+"""
+
 for point in state_space.get_next_states():
 	print(point)
+
+"""
+# Intersection Test Cases
+seg1 = ( Point([0,0]), Point([4,3]) )
+seg2 = ( Point([1,1]), Point([4,1]) )
+print(segments_intersect(seg1, seg2))
+"""
