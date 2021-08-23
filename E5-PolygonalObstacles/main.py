@@ -20,6 +20,7 @@ class Point:
 class Polygon:
 
 	def __init__(self, vertices):
+		print(vertices)
 		self.vertices = [ Point(vertex) for vertex in vertices ]
 		self.edges = self.find_edges()
 		
@@ -64,8 +65,8 @@ class StateSpace:
 		# State Space Constants
 		self.start = Point(start)
 		self.end = Point(end)
-		self.obstacles = [ Polygon(polygon) for polygon in obstacles ]
-		self.poly_edges = self.find_poly_edges
+		self.obstacles = obstacles
+		self.poly_edges = self.get_poly_edges()
 		# Current State Representation
 		self.curr_state = self.start 
 		self.curr_polygon = None  
@@ -112,8 +113,8 @@ class StateSpace:
 
 
 polygons = [
-	Polygon((1,1), (1,3), (4,3), (4,1)),
-	Polygon((5,2), (6,4), (4,5))
+	Polygon([(1,1), (1,3), (4,3), (4,1)]),
+	Polygon([(5,2), (6,4), (4,5)])
 ]
 
 state_space = StateSpace(
