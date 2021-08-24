@@ -167,6 +167,9 @@ class StateSpace:
 		# Set to None for terminal points
 		return None
 
+	def is_goal_state(self, state):
+		return state == self.end
+
 	def is_reachable(self, destn, src):
 		# Already checked that destn and src are not in the same polygon
 		# Check if the path from src to destn intersects any other edge
