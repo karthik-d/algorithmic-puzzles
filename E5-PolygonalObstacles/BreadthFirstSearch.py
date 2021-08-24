@@ -21,15 +21,10 @@ def search(state_space):
 	# Queue of fringe states and their respective paths
 	state_queue = Queue([state_space.start])
 	path_queue = Queue([Path([state_space.start])])
-	# Store the dequeued node count
-	node_count = 0
-	# Store the last node number of levels
-	level_limits = Queue([1, 1])
 	while(not state_queue.is_empty()):
 		# PRE-VISIT
 		state = state_queue.dequeue()
 		path_to_state = path_queue.dequeue()	
-		node_count += 1
 		if state_space.is_visited(state):
 			continue
 		# VISIT		
@@ -39,21 +34,13 @@ def search(state_space):
 			return path_to_state
 		# POST-VISIT
 		# Find fringe and add to queue
-		# Add fringe size to current level's limit
 		fringe = state_space.get_next_states(include_visited=False)
 		state_queue.enqueue(fringe)
-		level_limits.set_back(level_limits.get_back()+len(fringe))
 		# Store paths to each fringe
 		for next_state in fringe:
 			next_path = deepcopy(path_to_state)
 			next_path.add_state(next_state)
 			path_queue.enqueue([next_path])
-		# Check if current level has reached its end
-		if node_count == level_limits.get_front():
-			# Remove terminated level's end
-			# Duplicate next level's limit to store next level limit
-			level_limits.dequeue()
-			level_limits.enqueue([level_limits.get_back()])
 	
 	return False 
 
