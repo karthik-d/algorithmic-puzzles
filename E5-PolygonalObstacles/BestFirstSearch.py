@@ -4,22 +4,24 @@ from copy import deepcopy
 from StateFormulation import *
 from search_utils import *
 
-def deduce_path(state, parents):
-	
-	def deduce_BFS_path_rec(state, path_seq):
-		this_parent = parents[state]
-		if this_parent is None:
-			return path_seq
-		path_seq = [this_parent] + path_seq[:]
-		return deduce_BFS_path_rec(this_parent, path_seq)
-	
-	return deduce_BFS_path_rec(state, [])
+
+def heuristic(state, goal_state):
+	# SLD heuristic is used
+	return state.distance_to(goal_state)
+
+
+def evaluate_priority(state, context):
+	# 'context' contains data reqd to evaluate priority of state
+	# Here, it is the goal_state
+	(goal_state,) = context
+	return heuristic(state, goal_state)
 
 
 def search(state_space):
 
-	# Queue of fringe states and their respective paths
-	state_queue = Queue([state_space.start])
+	# Priority Queue of fringe states and their respective paths as payloads
+	state_queue = PriorityQueue(evaluate_priority)
+	state_queue.enqueue([state_space.start], [])
 	path_queue = Queue([Path([state_space.start])])
 	while(not state_queue.is_empty()):
 		# PRE-VISIT

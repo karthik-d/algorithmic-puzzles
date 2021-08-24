@@ -4,17 +4,6 @@ from copy import deepcopy
 from StateFormulation import *
 from search_utils import *
 
-def deduce_path(state, parents):
-	
-	def deduce_BFS_path_rec(state, path_seq):
-		this_parent = parents[state]
-		if this_parent is None:
-			return path_seq
-		path_seq = [this_parent] + path_seq[:]
-		return deduce_BFS_path_rec(this_parent, path_seq)
-	
-	return deduce_BFS_path_rec(state, [])
-
 
 def search(state_space):
 
