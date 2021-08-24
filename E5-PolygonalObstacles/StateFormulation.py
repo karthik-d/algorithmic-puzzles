@@ -132,6 +132,7 @@ class StateSpace:
 		self.obstacles = obstacles
 		self.poly_edges = self.get_poly_edges()
 		self.states = [self.start, self.end] + self.get_poly_vertices()
+		self.visited = [self.start]
 		# Current State Representation
 		self.curr_state = Point((4,3))
 		self.curr_polygon = Polygon([(1,1), (1,3), (4,3), (4,1)])
@@ -139,6 +140,7 @@ class StateSpace:
 
 	def move_to_state(self, new_state):
 		prev_state = self.curr_state
+		self.visited.append(prev_state)
 		self.curr_state = new_state
 		return prev_state.distance_to(self.curr_state)
 
@@ -170,6 +172,9 @@ class StateSpace:
 	def is_goal_state(self, state):
 		return state == self.end
 
+	def is_visited(self, state):
+		return state in self.visited
+
 	def is_reachable(self, destn, src):
 		# Already checked that destn and src are not in the same polygon
 		# Check if the path from src to destn intersects any other edge
@@ -179,7 +184,7 @@ class StateSpace:
 				return False
 		return True
 
-	def get_next_states(self, visited=[]):
+	def get_next_states(self, include_visited=False):
 		# Excludes visited states
 		# Either: 1. Adjacent vertex in same polygon
 		#     Or: 2. Non-obstructing path to vertex of other polygon
@@ -189,7 +194,7 @@ class StateSpace:
 			if state == self.curr_state:
 				continue 
 			# Skip if state is visited
-			if state in visited:
+			if not include_visited and self.is_visited(state):
 				continue 
 			# Case: State is part of same polygon (grazing allowed)
 			if self.curr_polygon and (state in self.curr_polygon.vertices):

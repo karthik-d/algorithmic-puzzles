@@ -24,21 +24,26 @@ def deduce_path(state, parents):
 
 def search():
 
-	state_space = Queue([INITIAL_STATE])
+	queue = StateSpace(
+		start = (0,0),
+		end = (6,5),
+		obstacles = polygons
+	)
+	queue = Queue([states_space.start])
+
 	explored_states = set()
 	parents = {INITIAL_STATE: None}
 
-	while(not state_space.is_empty()):
-		state = state_space.dequeue()
-		if state in explored_states:
+	
+	while(not queue.is_empty()):
+		state = queue.dequeue()
+		if state_space.is_visited(state):
 			continue
+		state_space.move_to_state(state)
 		explored_states.add(state)
 		if goal_test(state):
 			return explored_states, parents
-		fringe = get_next_states(state)
-		state_space.enqueue(fringe)
-		for new_state in fringe:
-			if new_state not in parents:
-				parents[new_state] = state
+		fringe = state_space.get_next_states(include_visited=False)
+		queue.enqueue(fringe)
 	
 	return False 
