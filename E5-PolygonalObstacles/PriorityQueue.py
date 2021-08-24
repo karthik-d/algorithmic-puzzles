@@ -13,7 +13,7 @@ class PriorityQueue:
 	def sort_elements(self, elems, contexts, payloads):
 		for i in range(1, len(elems)):
 			j = i-1
-			while j>=0 and self.priority(elems[j],contexts[j])<self.priority(elems[i],contexts[i]):
+			while j>=0 and self.priority(elems[j],contexts[j])>self.priority(elems[i],contexts[i]):
 				elems[j] = elems[j-1]
 				contexts[j] = contexts[j-1]
 				payloads[j] = payloads[j-1]
@@ -35,7 +35,7 @@ class PriorityQueue:
 		merged_contexts = []
 		merged_payloads = []
 		while data_i<self.size and elem_j<len(elems):
-			if self.priority(self.data[data_i], self.contexts[data_i]) >= self.priority(elems[elem_j], contexts[elem_j]):
+			if self.priority(self.data[data_i], self.contexts[data_i]) <= self.priority(elems[elem_j], contexts[elem_j]):
 				merged_data.append(self.data[data_i])
 				merged_contexts.append(self.contexts[data_i])
 				merged_payloads.append(self.payloads[data_i])
