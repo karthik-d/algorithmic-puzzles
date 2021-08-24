@@ -57,8 +57,8 @@ class Vector:
 	def is_zero_vector(self):
 		return self.x == 0 and self.y==0
 
-	@classmethod
-	def normalize_angle(cls, angle):
+	@staticmethod
+	def normalize_angle(angle):
 		# Return angle in rannge [0,360]
 		while angle<0:
 			angle += 2*pi 
@@ -137,6 +137,11 @@ class StateSpace:
 		self.curr_polygon = Polygon([(1,1), (1,3), (4,3), (4,1)])
 		# Store the polygon of current state 
 
+	def move_to_state(self, new_state):
+		prev_state = self.curr_state
+		self.curr_state = new_state
+		return prev_state.distance_to(self.curr_state)
+
 	def get_poly_vertices(self):
 		# Poly_Edges is the set of all edges of the obstacles in the state space
 		vertices = []
@@ -150,6 +155,17 @@ class StateSpace:
 		for polygon in self.obstacles:
 			edges.extend(polygon.edges)
 		return edges
+
+	def get_curr_polygon(self):
+		# Check if move was on same polygon
+		if self.curr_state in self.curr_polygon:
+			return self.curr_polgon
+		# Find polygon 
+		for polygon in self.obstacles:
+			if self.curr_state in polygon:
+				return polygon 
+		# Set to None for terminal points
+		return None
 
 	def is_reachable(self, destn, src):
 		# Already checked that destn and src are not in the same polygon
@@ -172,7 +188,7 @@ class StateSpace:
 			# Skip if state is visited
 			if state in visited:
 				continue 
-			# Case: State part of same polygon (grazing allowed)
+			# Case: State is part of same polygon (grazing allowed)
 			if self.curr_polygon and (state in self.curr_polygon.vertices):
 				# Allow if it is an adjacent vertex
 				num_vertices = len(self.curr_polygon.vertices)
@@ -182,7 +198,7 @@ class StateSpace:
 						if state in ( self.curr_polygon.vertices[(i+1)%num_vertices], self.curr_polygon.vertices[i-1] ):
 							next_states.append(state)
 				continue
-			# Case: State not part of same polygon
+			# Case: State is not part of same polygon
 			if self.is_reachable(state, self.curr_state):
 				next_states.append(state)
 		return next_states
