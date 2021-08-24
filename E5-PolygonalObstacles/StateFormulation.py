@@ -132,17 +132,18 @@ class StateSpace:
 		self.obstacles = obstacles
 		self.poly_edges = self.get_poly_edges()
 		self.states = [self.start, self.end] + self.get_poly_vertices()
-		self.visited = [self.start]
+		self.visited = []
 		# Current State Representation
-		self.curr_state = Point((4,3))
-		self.curr_polygon = Polygon([(1,1), (1,3), (4,3), (4,1)])
+		self.curr_state = None
+		self.curr_polygon = None
 		# Store the polygon of current state 
 
 	def move_to_state(self, new_state):
 		prev_state = self.curr_state
-		self.visited.append(prev_state)
 		self.curr_state = new_state
-		return prev_state.distance_to(self.curr_state)
+		self.curr_polygon = self.get_curr_polygon()
+		if prev_state is not None:
+			self.visited.append(prev_state)
 
 	def get_poly_vertices(self):
 		# Poly_Edges is the set of all edges of the obstacles in the state space
@@ -160,11 +161,11 @@ class StateSpace:
 
 	def get_curr_polygon(self):
 		# Check if move was on same polygon
-		if self.curr_state in self.curr_polygon:
-			return self.curr_polgon
+		if self.curr_polygon and self.curr_state in self.curr_polygon.vertices:
+			return self.curr_polygon
 		# Find polygon 
 		for polygon in self.obstacles:
-			if self.curr_state in polygon:
+			if self.curr_state in polygon.vertices:
 				return polygon 
 		# Set to None for terminal points
 		return None
