@@ -21,12 +21,15 @@ def search(state_space):
 
 	# Priority Queue of fringe states and their respective paths as payloads
 	state_queue = PriorityQueue(evaluate_priority)
-	state_queue.enqueue([state_space.start], [])
-	path_queue = Queue([Path([state_space.start])])
+	state_queue.enqueue(
+		elems=[state_space.start], 
+		contexts=[(state_space.end,)],
+		payloads=[Path([state_space.start])]
+	)
+	
 	while(not state_queue.is_empty()):
 		# PRE-VISIT
-		state = state_queue.dequeue()
-		path_to_state = path_queue.dequeue()	
+		state, path_to_state = state_queue.dequeue()
 		if state_space.is_visited(state):
 			continue
 		# VISIT		
@@ -36,13 +39,16 @@ def search(state_space):
 			return path_to_state
 		# POST-VISIT
 		# Find fringe and add to queue
+		# Store paths to each fringe as its payload
 		fringe = state_space.get_next_states(include_visited=False)
-		state_queue.enqueue(fringe)
-		# Store paths to each fringe
 		for next_state in fringe:
 			next_path = deepcopy(path_to_state)
 			next_path.add_state(next_state)
-			path_queue.enqueue([next_path])
+			state_queue.enqueue(
+				elems=[next_state], 
+				contexts=[(state_space.end,)],
+				payloads=[next_path]
+			)
 	
 	return False 
 

@@ -27,7 +27,7 @@ class PriorityQueue:
 		# 'contexts' contains the data required to resolve the priority of elements
 		# The resolution is done using the 'priority_func' function
 		# Sort the insertion elements 
-		elems, contexts = self.sort_elements(elems, contexts)
+		elems, contexts,payloads = self.sort_elements(elems, contexts, payloads)
 		# Merge with current data
 		data_i = 0
 		elem_j = 0
@@ -35,7 +35,7 @@ class PriorityQueue:
 		merged_contexts = []
 		merged_payloads = []
 		while data_i<self.size and elem_j<len(elems):
-			if self.priority(self.data[data_i], self.contexts[data_i]) >= self.priority(elems[elem_j], context[elem_j]):
+			if self.priority(self.data[data_i], self.contexts[data_i]) >= self.priority(elems[elem_j], contexts[elem_j]):
 				merged_data.append(self.data[data_i])
 				merged_contexts.append(self.contexts[data_i])
 				merged_payloads.append(self.payloads[data_i])
@@ -60,7 +60,7 @@ class PriorityQueue:
 		self.size += len(elems)
 
 	def dequeue(self):
-		if self.is_empty:
+		if self.is_empty():
 			return None 
 		self.size -= 1
 		return self.data.pop(0), self.payloads.pop(0)
