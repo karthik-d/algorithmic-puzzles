@@ -7,6 +7,11 @@ class Point:
 		self.x = coords[0]
 		self.y = coords[1]
 
+	def distance_to(self, other_pt):
+		horizontal_sq = (self.x-other_pt.x)**2
+		vertical_sq = (self.y-other_pt.y)**2
+		return (horizontal_sq+vertical_sq)**0.5
+
 	def __eq__(self, other_pt):
 		return self.x == other_pt.x and self.y==other_pt.y
 
@@ -132,7 +137,7 @@ class StateSpace:
 		self.obstacles = obstacles
 		self.poly_edges = self.get_poly_edges()
 		self.states = [self.start, self.end] + self.get_poly_vertices()
-		self.visited = []
+		self.visited = set()
 		# Current State Representation
 		self.curr_state = None
 		self.curr_polygon = None
@@ -143,7 +148,7 @@ class StateSpace:
 		self.curr_state = new_state
 		self.curr_polygon = self.get_curr_polygon()
 		if prev_state is not None:
-			self.visited.append(prev_state)
+			self.visited.add(prev_state)
 
 	def get_poly_vertices(self):
 		# Poly_Edges is the set of all edges of the obstacles in the state space
@@ -170,8 +175,8 @@ class StateSpace:
 		# Set to None for terminal points
 		return None
 
-	def is_goal_state(self, state):
-		return state == self.end
+	def at_goal_state(self):
+		return self.curr_state == self.end
 
 	def is_visited(self, state):
 		return state in self.visited
