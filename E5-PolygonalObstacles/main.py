@@ -2,6 +2,7 @@ import time
 from copy import deepcopy
 
 from StateFormulation import *
+from InstanceGeneratore import *
 import BreadthFirstSearch as BFS 
 import BestFirstSearch as Best_Greedy
 import AStarSearch as AStar 
@@ -31,7 +32,9 @@ state_space = StateSpace(
 	obstacles = polygons
 )
 
-print("\nBREADTH FIRST SEARCH")
+print(state_space)
+
+print("\n\nBREADTH FIRST SEARCH")
 print(line)
 result = BFS.search(deepcopy(state_space))
 if result:
@@ -61,3 +64,10 @@ if result:
 # Solution Found
 # (120,650), (151,670), (198,635), (220,616), (280,583), (339,578), (380,560)
 # Cost: 297.02594348473116
+
+
+N_INSTANCES = 100
+# Empirical Analysis using N_INSTANCES problems. Modify this constant as required
+print(line)
+print("EMPIRICAL ANALYSIS")
+print(line)

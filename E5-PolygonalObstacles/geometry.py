@@ -84,6 +84,14 @@ class Polygon:
 		edges.append((self.vertices[-1], self.vertices[0]))
 		return edges
 
+	def __str__(self):
+		display_string = '{sides}-sided Polygon : {vertices}'.format(
+			sides=len(self.vertices),
+			vertices='{'+', '.join(map(str, self.vertices))+'}'
+		)
+		return display_string
+		
+
 
 def has_duplicates(points):
 	return len(set(points))!=len(points)

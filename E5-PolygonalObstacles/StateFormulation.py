@@ -90,8 +90,9 @@ class StateSpace:
 		return next_states
 
 	def __str__(self):
-		display_string = "Start: {start}\nGoal: {goal}\nPolygon\n{polygon}".format(
+		display_string = "Start: {start}\nGoal: {goal}\nPolygons:\n{polygon}".format(
 			start=self.start, 
 			goal=self.end, 
-			polygon=str(self.obstacles)
+			polygon='\n'.join(map(str, self.obstacles))
 		)
+		return display_string
