@@ -1,35 +1,63 @@
+import time
+from copy import deepcopy
+
 from StateFormulation import *
+import BreadthFirstSearch as BFS 
+import BestFirstSearch as Best_Greedy
+import AStarSearch as AStar 
 
+line = '-'*50
+
+# SIMPLE MANUAL TEST CASE (diagrams attached in 'Documentation')
+print(line)
+print("MANUAL TEST CASE")
+print(line)
+
+# Make Polygonal Obstacles
 polygons = [
-	Polygon([(1,1), (1,3), (4,3), (4,1)]),
-	Polygon([(5,2), (6,4), (4,5)])
+	Polygon([(220,616), (220,666), (251,670), (272,647)]),
+	Polygon([(341,655), (359,667), (374,651), (366,577)]),
+	Polygon([(311,530), (311,559), (339,578), (361,560), (361, 528), (336, 516)]),
+	Polygon([(105,628), (151,670), (180,629), (156,577), (113, 587)]),
+	Polygon([(118,517), (245,517), (245,577), (118,557)]),
+	Polygon([(280,583), (333,583), (333,665), (280,665)]),
+	Polygon([(252,594), (290,562), (264,538)]),
+	Polygon([(198,635), (217,574), (182,574)]),
 ]
-
+# Define State Space for Problem
 state_space = StateSpace(
-	start = (0,0),
-	end = (6,5),
+	start = (120,650),
+	end = (380,560),
 	obstacles = polygons
 )
 
-"""
-for edge in state_space.poly_edges:
-	print(" - ".join(map(str, edge)))
-print()
-for state in state_space.states:
-	print(state)
-print()
-"""
+print("\nBREADTH FIRST SEARCH")
+print(line)
+result = BFS.search(deepcopy(state_space))
+if result:
+	print("Path Found")
+	print(result)
+# Solution Found
+# (120,650), (105,628), (118,517), (336,516), (361,528), (380,560)
+# Cost: 421.3344534244741
 
-for point in state_space.get_next_states():
-	print(point)
+print("\n\nBEST FIRST GREEDY SEARCH")
+print(line)
+result = Best_Greedy.search(deepcopy(state_space))
+print(result)
+if result:
+	print("Path Found")
+	print(result)
+# Solution Found
+# (120,650), (151,670), (251,670), (359,667), (374,651), (380,560)
+# Cost: 358.0626920104638
 
-"""
-# Intersection Test Cases
-seg1 = ( Point([0,0]), Point([4,3]) )
-seg2 = ( Point([1,1]), Point([4,1]) )
-print(segments_intersect(seg1, seg2))
-#
-seg1 = ( Point([0,0]), Point([6,5]) )
-seg2 = ( Point([1,3]), Point([4,3]) )
-print(segments_intersect(seg1, seg2))
-"""
+print("\n\nA* SEARCH")
+print(line)
+result = AStar.search(deepcopy(state_space))
+if result:
+	print("Path Found")
+	print(result)
+# Solution Found
+# (120,650), (151,670), (198,635), (220,616), (280,583), (339,578), (380,560)
+# Cost: 297.02594348473116

@@ -88,3 +88,10 @@ class StateSpace:
 			if self.is_reachable(state, self.curr_state):
 				next_states.append(state)
 		return next_states
+
+	def __str__(self):
+		display_string = "Start: {start}\nGoal: {goal}\nPolygon\n{polygon}".format(
+			start=self.start, 
+			goal=self.end, 
+			polygon=str(self.obstacles)
+		)
