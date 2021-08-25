@@ -58,3 +58,7 @@ state_space = StateSpace(
 	obstacles = polygons
 )
 print(search(state_space))
+
+# Solution Found
+# (120,650), (105,628), (118,517), (336,516), (361,528), (380,560)
+# Cost: 421.3344534244741
