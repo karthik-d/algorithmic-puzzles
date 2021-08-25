@@ -27,7 +27,9 @@ def search(state_space):
 		contexts=[(path_to_start.cost, state_space.end)],
 		payloads=[path_to_start]
 	)
-	
+	# Node Counters
+	visited_cnt = 0
+	generated_cnt = 0	
 	while(not state_queue.is_empty()):
 		# PRE-VISIT
 		state, path_to_state = state_queue.dequeue()
@@ -36,8 +38,9 @@ def search(state_space):
 		# VISIT		
 		# Move to state and do goal test
 		state_space.move_to_state(state)
+		visited_cnt += 1
 		if state_space.at_goal_state():
-			return path_to_state
+			return path_to_state, generated_cnt, visited_cnt
 		# POST-VISIT
 		# Find fringe and add to queue
 		# Store paths to each fringe as its payload
@@ -50,7 +53,8 @@ def search(state_space):
 				contexts=[(next_path.cost, state_space.end)],
 				payloads=[next_path]
 			)
-	
+		generated_cnt += len(fringe)
+
 	return False 
 
 """

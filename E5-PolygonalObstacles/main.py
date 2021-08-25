@@ -1,11 +1,25 @@
 import time
 from copy import deepcopy
+from numpy import inf
 
 from StateFormulation import *
-from InstanceGeneratore import *
+from InstanceGenerator import generate_state_space
 import BreadthFirstSearch as BFS 
 import BestFirstSearch as Best_Greedy
 import AStarSearch as AStar 
+
+
+def run_with_timer(function, args):
+	start = time.time()
+	results = function(*args)
+	return time.time()-start, results
+
+def display_summary(results, exec_time):
+	if results:
+		print("Path Found")
+	else:
+		print("Path NOT Found")
+	print("Time Taken: {time}s".format(time=exec_time))
 
 line = '-'*50
 
@@ -65,9 +79,98 @@ if result:
 # (120,650), (151,670), (198,635), (220,616), (280,583), (339,578), (380,560)
 # Cost: 297.02594348473116
 
+input("\n\nPress any key to start Empirical Analysis...\n\n")
 
-N_INSTANCES = 100
+N_INSTANCES = 10
 # Empirical Analysis using N_INSTANCES problems. Modify this constant as required
+# Parameters analysed:
+# 	Number of nodes generated 
+#	Number of nodes expanded, 
+#	Actual time taken, 
+# 	Completeness, 
+#	Optimality
+
 print(line)
 print("EMPIRICAL ANALYSIS")
 print(line)
+
+# Overall Times
+bfs_time = 0
+bestfs_time = 0
+astar_time = 0
+# Overall Completions
+bfs_completes = 0
+bestfs_completes = 0
+astar_completes = 0
+# Overall Optimal Solution
+bfs_optimal = 0
+bestfs_optimal = 0
+astar_optimal = 0
+# Generate and Run instances
+for i in range(N_INSTANCES):
+	state_space = generate_state_space()
+	# Run BFS
+	bfs_exec_time, bfs_results = run_with_timer(
+		function=BFS.search, 
+		args=(deepcopy(state_space),)
+	)	
+	# Run Best-First
+	bestfs_exec_time, bestfs_results = run_with_timer(
+		function=Best_Greedy.search, 
+		args=(deepcopy(state_space),)
+	)	
+	# Run A*	
+	astar_exec_time, astar_results = run_with_timer(
+		function=AStar.search, 
+		args=(deepcopy(state_space),)
+	)	
+	# Collect Summaries
+	# Running time
+	bfs_time += bfs_exec_time
+	bestfs_time += bestfs_exec_time
+	astar_time += astar_exec_time
+	# Completion
+	if bfs_results:
+		bfs_completes += 1
+		bfs_cost = bfs_results[0].cost
+	else:
+		bfs_cost = inf
+	if bestfs_results:
+		bestfs_completes += 1
+		bestfs_cost = bestfs_results[0].cost
+	else:
+		bestfs_cost = inf
+	if astar_results:
+		astar_completes += 1
+		astar_cost = astar_results[0].cost
+	else:
+		astar_cost = inf
+	# Optimality
+	opt_cost = min([bfs_cost, bestfs_cost, astar_cost])
+	if bfs_cost == opt_cost:
+		bfs_optimal += 1
+	if bestfs_cost == opt_cost:
+		bestfs_optimal += 1
+	if astar_cost == opt_cost:
+		astar_optimal += 1
+
+	# Display Instance-Wise Summary
+	print("INSTANCE", i+1)
+	print(line)
+	print(state_space)
+	# For BFS
+	print("\nBREADTH FIRST SEARCH")
+	print(line)
+	display_summary(bfs_exec_time, bfs_results)
+	# For Best First
+	print("\nBEST FIRST GREEDY SEARCH")
+	print(line)
+	display_summary(bestfs_exec_time, bestfs_results)
+	# For A*
+	print("\nA* SEARCH")
+	print(line)
+	display_summary(astar_exec_time, astar_exec_time)
+	print("\n\n")
+
+
+

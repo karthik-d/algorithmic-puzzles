@@ -10,6 +10,9 @@ def search(state_space):
 	# Queue of fringe states and their respective paths
 	state_queue = Queue([state_space.start])
 	path_queue = Queue([Path([state_space.start])])
+	# Node Counters
+	visited_cnt = 0
+	generated_cnt = 0
 	while(not state_queue.is_empty()):
 		# PRE-VISIT
 		state = state_queue.dequeue()
@@ -19,8 +22,9 @@ def search(state_space):
 		# VISIT		
 		# Move to state and do goal test
 		state_space.move_to_state(state)
+		visited_cnt += 1
 		if state_space.at_goal_state():
-			return path_to_state
+			return path_to_state, generated_cnt, visited_cnt
 		# POST-VISIT
 		# Find fringe and add to queue
 		fringe = state_space.get_next_states(include_visited=False)
@@ -30,6 +34,7 @@ def search(state_space):
 			next_path = deepcopy(path_to_state)
 			next_path.add_state(next_state)
 			path_queue.enqueue([next_path])
+		generated_cnt += len(fringe)
 	
 	return False 
 

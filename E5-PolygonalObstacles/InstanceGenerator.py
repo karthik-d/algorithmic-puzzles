@@ -20,7 +20,7 @@ def generate_coordinates():
 
 def generate_polygon():
 	# Randomly determine number of vertices and generate points
-	num_vertices = random.randint(MIN_COORDINATE_VALUE, MAX_OBSTACLES+1)
+	num_vertices = random.randint(MIN_VERTICES_POLY, MAX_VERTICES_POLY+1)
 	vertices = [ generate_coordinates() for k in range(num_vertices) ]
 	return Polygon(vertices)
 
