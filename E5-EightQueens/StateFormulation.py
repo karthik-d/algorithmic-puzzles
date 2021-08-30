@@ -1,4 +1,4 @@
-import np.random as random
+import numpy.random as random
 from copy import deepcopy
 
 NUM_QUEENS = 8
@@ -19,7 +19,17 @@ def count_attacks(state):
 	for column in range(NUM_QUEENS):
 		# Count queens in same row. Exclude self
 		num_attacks += state.count(state[column])-1
-		# Try right diagonal
+		# Try right and left diagonals. Exclude self
+		num_attacks -= 2
+		diag_sum = column + state[column]
+		diag_diff = column - state[column]
+		for i in range(NUM_QUEENS):
+			if i+state[i]==diag_sum:
+				num_attacks += 1
+			if i-state[i]==diag_diff:
+				num_attacks += 1
+	# Each pair-attack was counted twice. Hence, return result/2
+	return num_attacks//2			
 
 
 # Find the next states
@@ -36,3 +46,6 @@ def get_next_states(state):
 				temp_state[column] = row
 				attacks.append(count_attacks(temp_state))
 	return moves, attacks
+
+sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
+print(get_next_states(sample_state))
