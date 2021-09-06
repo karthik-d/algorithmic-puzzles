@@ -4,6 +4,7 @@
 from StateFormulation import *
 
 def search():
+	restarts = 0
 	while True:
 		state = generate_random_state()
 		# Reset at each restart
@@ -12,12 +13,13 @@ def search():
 			curr_attacks = count_attacks(state)
 			if curr_attacks == 0:
 				# Goal reached
-				return state, transitions
+				return state, transitions, restarts
 			# Generate next best state
 			move, next_attacks = get_next_best_move(state)
 			if next_attacks >= curr_attacks:
 				# At some local maxima or plateau
 				# Restart search
+				restarts += 1
 				break
 			# Move to the best successor state
 			in_col, to_row = move
