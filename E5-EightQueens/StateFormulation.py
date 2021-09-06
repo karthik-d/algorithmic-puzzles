@@ -94,5 +94,8 @@ def display_state(state):
 sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
 print(get_next_states(sample_state))
 """
+# Displaying attacks for each move
+"""
 sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
 get_next_states(sample_state, display=True)
+"""
