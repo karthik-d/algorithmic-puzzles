@@ -32,9 +32,14 @@ def count_attacks(state):
 
 
 # Find the next states
-def get_next_states(state):
+def get_next_states(state, display=False):
 	moves = list()
 	attacks = list()
+	if display:
+		attacks_array = [
+			[ 'Q ' if state[col]==row else None for col in range(NUM_QUEENS) ]
+			for row in range(NUM_QUEENS)
+		]
 	# Try moving each queen to every other position in its column
 	for column in range(NUM_QUEENS):
 		for row in range(NUM_QUEENS):
@@ -45,7 +50,13 @@ def get_next_states(state):
 				moves.append((column, row))
 				temp_state = deepcopy(state)
 				temp_state[column] = row
-				attacks.append(count_attacks(temp_state))
+				num_attacks = count_attacks(temp_state)
+				attacks.append(num_attacks)
+				if display:
+					attacks_array[row][column] = str(num_attacks).ljust(2)
+	if display:
+		for disp_row in attacks_array:
+			print(disp_row)
 	return moves, attacks
 
 
@@ -83,3 +94,5 @@ def display_state(state):
 sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
 print(get_next_states(sample_state))
 """
+sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
+get_next_states(sample_state, display=True)
