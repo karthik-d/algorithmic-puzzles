@@ -50,7 +50,7 @@ def get_next_states(state):
 
 
 # Find the lowest attack suuccessor state
-def get_next_best_state(state):
+def get_next_best_move(state):
 	min_attacks = MAX_POSSIBLE_ATTACKS
 	min_attacks_move = None
 	# Try moving each queen to every other position in its column
