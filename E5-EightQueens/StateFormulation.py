@@ -2,6 +2,7 @@ import numpy.random as random
 from copy import deepcopy
 
 NUM_QUEENS = 8
+MAX_POSSIBLE_ATTACKS =  ( NUM_QUEENS * (NUM_QUEENS-1) ) // 2  # i.e nC2
 
 def generate_random_state():
 	state = [[
@@ -9,8 +10,6 @@ def generate_random_state():
 		for x in range(NUM_QUEENS)
 	]]
 	return state
-
-INITIAL_STATE = generate_random_state()
 
 
 def count_attacks(state):
@@ -36,9 +35,11 @@ def count_attacks(state):
 def get_next_states(state):
 	moves = list()
 	attacks = list()
+	# Try moving each queen to every other position in its column
 	for column in range(NUM_QUEENS):
 		for row in range(NUM_QUEENS):
 			if row == state[column]:
+				# If moving again to same row, skip
 				continue
 			else:
 				moves.append((column, row))
@@ -46,6 +47,26 @@ def get_next_states(state):
 				temp_state[column] = row
 				attacks.append(count_attacks(temp_state))
 	return moves, attacks
+
+
+# Find the lowest attack suuccessor state
+def get_next_best_state(state):
+	min_attacks = MAX_POSSIBLE_ATTACKS
+	min_attacks_move = None
+	# Try moving each queen to every other position in its column
+	for column in range(NUM_QUEENS):
+		for row in range(NUM_QUEENS):
+			if row == state[column]:
+				# If moving again to same row, skip
+				continue
+			temp_state = deepcopy(state)
+			temp_state[column] = row
+			num_attacks = count_attacks(temp_state)
+			if num_attacks<min_attacks:
+				min_attacks_move = (column, row)
+				min_attacks = num_attacks 
+	# Return the best move and its cost value
+	return min_attacks_move, min_attacks
 
 sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
 print(get_next_states(sample_state))
