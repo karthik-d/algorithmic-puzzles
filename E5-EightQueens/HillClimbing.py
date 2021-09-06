@@ -5,7 +5,7 @@ from StateFormulation import *
 
 def search():
 	while True:
-	state = generate_random_state()
+		state = generate_random_state()
 		while True:
 			curr_attacks = count_attacks(state)
 			if curr_attacks == 0:
@@ -22,3 +22,5 @@ def search():
 			state[in_col] = to_row 
 		# Restart search with new random start
 		state = generate_random_state()
+	
+print(display_state(search()))

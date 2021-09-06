@@ -5,10 +5,10 @@ NUM_QUEENS = 8
 MAX_POSSIBLE_ATTACKS =  ( NUM_QUEENS * (NUM_QUEENS-1) ) // 2  # i.e nC2
 
 def generate_random_state():
-	state = [[
+	state = [
 		random.randint(0, NUM_QUEENS)
 		for x in range(NUM_QUEENS)
-	]]
+	]
 	return state
 
 
@@ -68,5 +68,18 @@ def get_next_best_move(state):
 	# Return the best move and its cost value
 	return min_attacks_move, min_attacks
 
+
+# Display the state, visually
+def display_state(state):
+	disp_array = [
+		[ 'Q' if state[col]==row else '-' for row in range(NUM_QUEENS) ]
+		for col in range(NUM_QUEENS)
+	]
+	for disp_row in disp_array:
+		print(disp_row)
+
+# Testing state generation
+"""
 sample_state = [4, 5, 6, 3, 4, 5, 6, 5]
 print(get_next_states(sample_state))
+"""
