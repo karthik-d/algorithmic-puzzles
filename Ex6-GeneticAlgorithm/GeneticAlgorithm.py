@@ -45,9 +45,22 @@ def mutate_state(state):
 
 
 def search(population_size=8):
+
+	# Check if the population has a goal state
+	def scan_goal_state(population):
+		for state in population:
+			if is_goal_reached(state):
+				return True, state
+		return False, None
+
+	# Generate random population
 	population = [ generate_random_state() for k in range(population_size) ]
 
-	while not any(map(is_goal_reached, population)):
+	# Get parents, crossover and mutate till goal is generated
+	num_generations = 0
+	has_goal_state, goal_state = scan_goal_state(population)
+	while not has_goal_state:
+		num_generations += 1
 		# Select parent-pairs from population as per probability of selection
 		parent_pairs = sample_population(population)
 		# Generate descendant population
@@ -55,6 +68,8 @@ def search(population_size=8):
 		for pair in parent_pairs:
 			population_next.extend(list(map(mutate_state, crossover_pair(pair, population_size))))
 		population = copy(population_next)
-	return population
+		has_goal_state, goal_state = scan_goal_state(population)
+	
+	return goal_state, num_generations
 		
 			

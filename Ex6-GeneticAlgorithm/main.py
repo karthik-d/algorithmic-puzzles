@@ -1,19 +1,11 @@
 from GeneticAlgorithm import search as GA_search
 from StateFormulation import display_state
 
-goal_population = GA_search()
-print(goal_population)
-
-print("INITIAL State: ", transitions[0])
+population_size = 8
+print("Running Genetic Algorithm...")
+goal_state, num_generations = GA_search(population_size=population_size)
+print("\nGOAL STATE REACHED:", goal_state)
 print()
-display_state(transitions[0])
-for state in transitions[1:-1]:
-	print("\t\t|\n\t\t|\n\t\tV\n")
-	print("State:", state)
-	print()
-	display_state(state)
-print("\t\t|\n\t\t|\n\t\tV\n")
-print("\nGOAL State:", transitions[-1])
-display_state(goal)
-
-print("\nNumber of Restarts:", restarts)
+display_state(goal_state)
+print("\nPopulation Size:", population_size)
+print("Number of Generations:", num_generations)
