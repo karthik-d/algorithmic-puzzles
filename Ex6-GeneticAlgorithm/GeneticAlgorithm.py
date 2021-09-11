@@ -5,7 +5,6 @@ import numpy as np
 
 def sample_population(population):
 	num_draws = len(population)
-	print("TEST:", population)
 	# Create array with elements as per probability of choice
 	population_fitness = [ count_non_attacks(state) 
 							for state in population ]
@@ -17,7 +16,6 @@ def sample_population(population):
 			])
 	np.random.shuffle(population_sample)
 	# Select parents and pair them up
-	#print(population_sample)
 	population_idx = [ x for x in range(len(population_sample)) ]
 	parent_pairs_idx = np.random.choice(population_idx, num_draws)
 	parent_pairs = [ population_sample[idx] for idx in parent_pairs_idx ]
@@ -30,9 +28,9 @@ def crossover_pair(pair, population_size):
 	crossover_idx = np.random.randint(1, population_size-1)
 	result = []
 	parent_1, parent_2 = pair
-	result.append(parent_1[:crossover_idx+1] + parent_2[crossover_idx:])
-	result.append(parent_2[:crossover_idx+1] + parent_1[crossover_idx:])
-	return result
+	result.append(parent_1[:crossover_idx] + parent_2[crossover_idx:])
+	result.append(parent_2[:crossover_idx] + parent_1[crossover_idx:])
+	return tuple(result)
 	
 
 def mutate_state(state):
@@ -53,9 +51,9 @@ def search(population_size=8):
 		# Select parent-pairs from population as per probability of selection
 		parent_pairs = sample_population(population)
 		# Generate descendant population
-		population_next = []
+		population_next = list()
 		for pair in parent_pairs:
-			population_next.append(mutate_state(crossover_pair(pair, population_size)))
+			population_next.extend(list(map(mutate_state, crossover_pair(pair, population_size))))
 		population = copy(population_next)
 	return population
 		
