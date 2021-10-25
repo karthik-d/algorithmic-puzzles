@@ -24,12 +24,14 @@ def get_next_states(state, operand_space):
 				if ExpressionTree.is_merge_valid(operation, state, other_state):
 					operation_node = ExpressionNode(operation, True)
 					next_states.append(ExpressionTree.merge_trees(operation_node, state, other_state))
-				else:
-					# Not a commutative operation
-					# Order 1
+			else:
+				# Not a commutative operation
+				# Order 1
+				if ExpressionTree.is_merge_valid(operation, state, other_state):
 					operation_node = ExpressionNode(operation, True)
-					next_states.append(ExpressionTree.merge_trees(operation_node, other_state, state))
-					# Order 2
+					next_states.append(ExpressionTree.merge_trees(operation_node, state, other_state))
+				# Order 2
+				if ExpressionTree.is_merge_valid(operation, other_state, state):
 					operation_node = ExpressionNode(operation, True)
 					next_states.append(ExpressionTree.merge_trees(operation_node, other_state, state))
 	return next_states	

@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 class ExpressionNode:
 
 	operations = [ '+', '-', '*', '/' ]
@@ -75,13 +77,16 @@ class ExpressionTree:
 	@classmethod
 	def is_merge_valid(cls, operation, lhs, rhs):
 		if operation == '/' and lhs.evaluation % rhs.evaluation != 0:
+			# print("F1")
 			return False
 		if lhs.operand_space != rhs.operand_space:
+			# print("F2")
 			return False 
 		# NAND-operation
 		# Same operand must NOT have been used in both already
 		for x_bit, y_bit in zip(lhs.bitmask, rhs.bitmask):
 			if x_bit and y_bit:
+				# print("F3")
 				return False 
 		return True
 
@@ -96,6 +101,8 @@ class ExpressionTree:
 		operation_node.left_child = lhs.root
 		operation_node.right_child = rhs.root
 		# Make new tree
+		lhs = deepcopy(lhs)
+		rhs = deepcopy(rhs)
 		new_tree = ExpressionTree(
 			operand_space=lhs.operand_space,
 			root_node=operation_node,

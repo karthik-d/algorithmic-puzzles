@@ -24,16 +24,16 @@ def search(operand_space, goal_value):
 		# VISIT		
 		if is_operand_space_exhausted(state):
 			best_diff = abs(closest_result.evaluation-state.evaluation)
-			curr_diff = abs(goal_value.evalution-state.evaluation):
-				if curr_diff == 0:
-					# Goal hit
-					return state 
-				elif curr_diff < best_diff:
-					# New nearer state
-					closest_result = deepcopy(state)
+			curr_diff = abs(goal_value-state.evaluation)
+			if curr_diff == 0:
+				# Goal hit
+				return state 
+			elif curr_diff < best_diff:
+				# New nearer state
+				closest_result = deepcopy(state)
 		# POST-VISIT
 		# Find fringe and add to queue
-		fringe = state_space.get_next_states(state)
+		fringe = get_next_states(state, operand_space)
 		state_queue.enqueue(fringe)
 	
 	if closest_resilt.evaluation == inf:
