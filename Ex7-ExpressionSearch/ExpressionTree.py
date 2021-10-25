@@ -26,39 +26,6 @@ class ExpressionTree:
 	Edges represent an operation (+, -, *, /)
 	"""
 
-	def __init__(self, operand_space, root_node, bitmask=None, evaluation=None):
-		"""
-		For constructing trees from scratch, root_node is assumed to be a single node
-		Bitmask is computed. Expression result is computed
-		For constructing trees from two other trees, bitmask must be supplied through the merge
-		operation. Expression evaluation must be passed
-		"""
-		self.operand_space = operand_space
-		self.root = root_node
-		# Bitmask set
-		if bitmask is None:
-			self.bitmask = self.get_bitmask(self.root)
-		else:
-			self.bitmask = bitmask
-		# Evaluation result
-		if evaluation is None:
-			self.evaluation = self.root.value 
-		else:
-			self.evaluation = evaluation
-
-	def display(self):
-		display_queue = [self.root]
-		while display_queue:
-			node = display_queue.pop(0)
-			print(node.value)
-			if node.left_child is not None:
-				display_queue.append(node.left_child)
-			if node.right_child is not None:
-				display_queue.append(node.right_child)	
-
-	def get_bitmask(self, operand_node):
-		return [ operand_node.value==x for x in self.operand_space ]
-
 	@classmethod
 	def merge_bitmasks(cls, bitmask_1, bitmask_2):
 		return [ x or y for x,y in zip(bitmask_1, bitmask_2) ]
@@ -98,8 +65,8 @@ class ExpressionTree:
 		# Ensure the nodes can be merged
 		assert cls.is_merge_valid(operation_node.value, lhs, rhs) == True
 		# Merge nodes
-		operation_node.left_child = lhs.root
-		operation_node.right_child = rhs.root
+		operation_node.left_child = lhs
+		operation_node.right_child = rhs
 		# Make new tree
 		lhs = deepcopy(lhs)
 		rhs = deepcopy(rhs)
@@ -110,6 +77,45 @@ class ExpressionTree:
 			evaluation=cls.evaluate(operation_node.value, lhs.evaluation, rhs.evaluation)
 		)
 		return new_tree
+
+	def __init__(self, operand_space, root_node, bitmask=None, evaluation=None):
+		"""
+		For constructing trees from scratch, root_node is assumed to be a single node
+		Bitmask is computed. Expression result is computed
+		For constructing trees from two other trees, bitmask must be supplied through the merge
+		operation. Expression evaluation must be passed
+		"""
+		self.operand_space = operand_space
+		self.root = root_node
+		# Bitmask set
+		if bitmask is None:
+			self.bitmask = self.get_bitmask(self.root)
+		else:
+			self.bitmask = bitmask
+		# Evaluation result
+		if evaluation is None:
+			self.evaluation = self.root.value 
+		else:
+			self.evaluation = evaluation
+
+	def get_bitmask(self, operand_node):
+		return [ operand_node.value==x for x in self.operand_space ]
+
+	def display(self):
+		# Left recursion
+		print("(", end="")
+		if self.root.left_child is None:
+			pass
+		else:
+			self.root.left_child.display()
+		# Current value
+		print(self.root.value, end="")
+		# Right recursion
+		if self.root.right_child is None:
+			pass
+		else:
+			self.root.right_child.display()
+		print(")", end="")
 
 """		
 def run_test():
