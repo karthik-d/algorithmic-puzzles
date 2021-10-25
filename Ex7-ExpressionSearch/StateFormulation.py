@@ -1,6 +1,3 @@
-import numpy.random as random
-from copy import deepcopy
-
 from ExpressionTree import ExpressionTree, ExpressionNode
 
 def get_init_state(operand_space):

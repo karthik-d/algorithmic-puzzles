@@ -1,50 +1,51 @@
 from Queue import Queue 
+from numpy import inf
 from copy import deepcopy
 
 from StateFormulation import *
-from search_utils import *
 
 
-def search(state_space):
+def search(operand_space, goal_value):
 
 	# Queue of fringe states and their respective paths
-	state_queue = Queue([state_space.start])
-	path_queue = Queue([Path([state_space.start])])
+	state_queue = Queue(get_init_state(operand_space))
 	# Node Counters
 	visited_cnt = 0
 	generated_cnt = 0
+	closest_result = ExpressionTree(
+		operand_space=operand_space,
+		root_node=ExpressionNode(inf, False),
+		bitmask=[],
+		evaluation=inf
+	)
 	while(not state_queue.is_empty()):
 		# PRE-VISIT
 		state = state_queue.dequeue()
-		path_to_state = path_queue.dequeue()	
-		if state_space.is_visited(state):
-			continue
 		# VISIT		
-		# Move to state and do goal test
-		state_space.move_to_state(state)
-		visited_cnt += 1
-		if state_space.at_goal_state():
-			return path_to_state, generated_cnt, visited_cnt
+		if is_operand_space_exhausted(state):
+			best_diff = abs(closest_result.evaluation-state.evaluation)
+			curr_diff = abs(goal_value.evalution-state.evaluation):
+				if curr_diff == 0:
+					# Goal hit
+					return state 
+				elif curr_diff < best_diff:
+					# New nearer state
+					closest_result = deepcopy(state)
 		# POST-VISIT
 		# Find fringe and add to queue
-		fringe = state_space.get_next_states(include_visited=False)
+		fringe = state_space.get_next_states(state)
 		state_queue.enqueue(fringe)
-		# Store paths to each fringe
-		for next_state in fringe:
-			next_path = deepcopy(path_to_state)
-			next_path.add_state(next_state)
-			path_queue.enqueue([next_path])
-		generated_cnt += len(fringe)
 	
-	return False 
+	if closest_resilt.evaluation == inf:
+		return False
+	else:
+		return closest_result
 
 
-"""
-polygons = [
-	Polygon([(5,2), (6,4), (4,5)]),
-	Polygon([(1,1), (1,3), (4,3), (4,1)]),
-]
-"""
-# Solution Found
-# (120,650), (105,628), (118,517), (336,516), (361,528), (380,560)
-# Cost: 421.3344534244741
+
+search(
+	operand_space=[4, 8, 9],
+	goal_value=18
+).display()
+
+
