@@ -1,6 +1,7 @@
 class ExpressionNode:
 
 	operations = [ '+', '-', '*', '/' ]
+	operations_commutative = ['+', '*']
 
 	def __init__(self, value, assert_operation=True):
 		self.is_operand = value not in self.operations
