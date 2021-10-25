@@ -23,7 +23,7 @@ def search(operand_space, goal_value):
 		state = state_queue.dequeue()
 		# VISIT		
 		if is_operand_space_exhausted(state):
-			best_diff = abs(closest_result.evaluation-state.evaluation)
+			best_diff = abs(goal_value-closest_result.evaluation)
 			curr_diff = abs(goal_value-state.evaluation)
 			if curr_diff == 0:
 				# Goal hit
@@ -36,16 +36,16 @@ def search(operand_space, goal_value):
 		fringe = get_next_states(state, operand_space)
 		state_queue.enqueue(fringe)
 	
-	if closest_resilt.evaluation == inf:
+	if closest_result.evaluation == inf:
 		return False
 	else:
 		return closest_result
 
-
-
+"""
 search(
 	operand_space=[4, 8, 9],
 	goal_value=18
 ).display()
+"""
 
 
