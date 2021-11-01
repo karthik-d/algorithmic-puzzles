@@ -95,7 +95,7 @@ def get_next_states(state):
 		print("----")
 	return next_states
 			
-
+"""
 # TEST FOR NEXT-STATES
 inputs = [
 	[1, 2, 3],
@@ -104,6 +104,24 @@ inputs = [
 for in_ in inputs:
 	next_states = get_next_states(in_)
 	print(next_states, len(next_states))
+"""
+
+def goal_test(state):
+	prev = state[0]
+	for i in state[1:]:
+		if i < prev:
+			return False 
+		prev = i
+	return True 
+
+# TEST FOR GOAL TEST
+inputs = [
+	[1,2,3,4],
+	[1,3,2,4],
+	[1,4,3,2]
+]
+for in_ in inputs:
+	print(goal_test(in_))
 
 
 if __name__ == '__main__':
