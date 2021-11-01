@@ -12,7 +12,7 @@ class PriorityQueue:
 		self.priority_func = priority_func
 	
 	def enqueue(self, insertion_list):
-		insertion_list.sort()
+		insertion_list.sort(key=self.priority_func)
 		# Merge elements
 		a_ctr = 0
 		b_ctr = 0
@@ -83,6 +83,36 @@ def positional_distance(state):
 		distance += abs((state[i]-1)-i)
 	return distance
 
+def count_incorrect_posns(state):
+	cnt = len(state)
+	for i in range(len(state)):
+		if i == state[i]-1:
+			cnt -= 1
+	return cnt 
+
+"""
+print(count_incorrect_posns([1,5,4,3,2]))
+print(count_incorrect_posns([3,2,5,4,1]))
+"""
+
+def count_inversions(state):
+	cnt = 0
+	for i in range(len(state)-1):
+		for j in range(i+1, len(state)):
+			if state[i]>state[j]:
+				cnt += 1
+	return cnt
+
+def count_non_consecutive(state):
+	prev = state[0]
+	cnt = 0 if prev==1 else 1
+	for n in state[1:]:
+		if prev+1 != n:
+			cnt += 1
+		prev = n
+	return cnt
+		
+
 # STATE SPACE
 
 def get_next_states(state):
@@ -111,6 +141,11 @@ for in_ in inputs:
 	next_states = get_next_states(in_)
 	print(next_states, len(next_states))
 """
+"""
+q = PriorityQueue(count_incorrect_posns) 
+q.enqueue(get_next_states([5,4,3,2,1]))
+q.display()
+"""
 
 def goal_test(state):
 	prev = state[0]
@@ -134,7 +169,9 @@ for in_ in inputs:
 def best_first_search(initial_state):
 	# Least natural_runs --> First Priority
 	# state_space = PriorityQueue(count_natural_runs) 
-	state_space = PriorityQueue(positional_distance) 
+	# state_space = PriorityQueue(positional_distance) 
+	# state_space = PriorityQueue(count_incorrect_posns) 
+	state_space = PriorityQueue(count_non_consecutive) 
 	state_space.enqueue([initial_state])
 	# Track parents
 	parents = {
