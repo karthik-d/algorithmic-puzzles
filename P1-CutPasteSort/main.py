@@ -1,3 +1,9 @@
+from copy import copy, deepcopy
+
+def identity(n):
+	return n
+
+
 class PriorityQueue:
 
 	def __init__(self, priority_func):
@@ -36,6 +42,13 @@ class PriorityQueue:
 	def display(self):
 		print(self.elements)
 
+"""
+# TEST FOR PRIORITY QUEUE
+queue = PriorityQueue(identity)
+queue.enqueue([1,5,6,3])
+queue.enqueue([4,7,9])
+queue.display()
+"""
 
 def count_natural_runs(state):
 	cnt = 0
@@ -55,12 +68,42 @@ def count_natural_runs(state):
 	cnt += 1 
 	return cnt
 
-def identity(n):
-	return n
-
+"""
 # TEST FOR NATURAL RUNS
 print(count_natural_runs([1,2,3,6,7,4,5]))
 print(count_natural_runs([1,4,6,2,5,3,7]))
+"""
+
+
+# STATE SPACE
+
+def get_next_states(state):
+	next_states = []
+	length = len(state)
+	# Generate cut points
+	for cut_start in range(length+1):
+		for cut_end in range(cut_start+1, length+1):
+			temp_state = deepcopy(state)
+			cut_portion = temp_state[cut_start:cut_end]
+			cut_remain = temp_state[:cut_start] + temp_state[cut_end:]
+			# Generate insert points
+			for insert_pt in range(len(cut_remain)+1):
+				new_state = cut_remain[:insert_pt] + cut_portion[:] + cut_remain[insert_pt:]
+				if new_state != state:
+					next_states.append(new_state)
+					print(new_state)
+		print("----")
+	return next_states
+			
+
+# TEST FOR NEXT-STATES
+inputs = [
+	[1, 2, 3],
+	#[1, 2, 3, 4],
+]
+for in_ in inputs:
+	next_states = get_next_states(in_)
+	print(next_states, len(next_states))
 
 
 if __name__ == '__main__':
