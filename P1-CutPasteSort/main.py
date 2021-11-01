@@ -33,11 +33,14 @@ class PriorityQueue:
 		self.size += len(insertion_list)
 	
 	def dequeue(self):
-		if self.size == 0:
-			return None 
+		if self.is_empty():
+			return None
 		else:
 			self.size -= 1
 			return self.elements.pop(0)
+
+	def is_empty(self):
+		return self.size == 0
 
 	def display(self):
 		print(self.elements)
@@ -91,8 +94,6 @@ def get_next_states(state):
 				new_state = cut_remain[:insert_pt] + cut_portion[:] + cut_remain[insert_pt:]
 				if new_state != state:
 					next_states.append(new_state)
-					print(new_state)
-		print("----")
 	return next_states
 			
 """
@@ -114,6 +115,7 @@ def goal_test(state):
 		prev = i
 	return True 
 
+"""
 # TEST FOR GOAL TEST
 inputs = [
 	[1,2,3,4],
@@ -122,9 +124,37 @@ inputs = [
 ]
 for in_ in inputs:
 	print(goal_test(in_))
+"""
+
+def best_first_search(initial_state):
+	# Least natural_runs --> First Priority
+	state_space = PriorityQueue(count_natural_runs) 
+	state_space.enqueue([initial_state])
+	# Track parents
+	parents = {
+		tuple(initial_state): None
+	}
+	# Run search
+	while not state_space.is_empty():
+		curr_state = state_space.dequeue()
+		if goal_test(curr_state):
+			print("Found")
+			return curr_state, parents
+		fringe = get_next_states(curr_state)
+		state_space.enqueue(fringe)
+		# Record parents
+		for state in fringe:
+			state_key = tuple(state)
+			if parents.has_key(state_key):
+				pass 
+			else:
+				parents[state_key] = tuple(curr_state)
+	return None, None
 
 
 if __name__ == '__main__':
 	# Main Driver
 	initial_state = list(map(int, input().split()))
+	goal_state, parents = best_first_search(initial_state)
+	print(result, parents)
 
