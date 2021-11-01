@@ -77,6 +77,11 @@ print(count_natural_runs([1,2,3,6,7,4,5]))
 print(count_natural_runs([1,4,6,2,5,3,7]))
 """
 
+def positional_distance(state):
+	distance = 0
+	for i in range(len(state)):
+		distance += abs((state[i]-1)-i)
+	return distance
 
 # STATE SPACE
 
@@ -128,7 +133,8 @@ for in_ in inputs:
 
 def best_first_search(initial_state):
 	# Least natural_runs --> First Priority
-	state_space = PriorityQueue(count_natural_runs) 
+	# state_space = PriorityQueue(count_natural_runs) 
+	state_space = PriorityQueue(positional_distance) 
 	state_space.enqueue([initial_state])
 	# Track parents
 	parents = {
@@ -145,16 +151,30 @@ def best_first_search(initial_state):
 		# Record parents
 		for state in fringe:
 			state_key = tuple(state)
-			if parents.has_key(state_key):
+			if state_key in parents:
 				pass 
 			else:
 				parents[state_key] = tuple(curr_state)
 	return None, None
+
+def get_path(state, parents):
+	state = tuple(state)
+	path = [ state ]
+	while True:
+		parent = parents[state]
+		if parent is None:
+			break
+		path.append(parent)
+		state = parent
+	return path[::-1]
+			
 
 
 if __name__ == '__main__':
 	# Main Driver
 	initial_state = list(map(int, input().split()))
 	goal_state, parents = best_first_search(initial_state)
-	print(result, parents)
+	for state in get_path(goal_state, parents):
+		print(state)
+
 
