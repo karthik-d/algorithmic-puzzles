@@ -195,24 +195,24 @@ def best_first_search(initial_state):
 
 def iterative_deepening_Astar(initial_state):
 
-	def search_rec(state, step, step_limit):
+	def search_rec(state, step, step_limit, path_acc):
 		# Try each step
 		# limit < f(n) + h(n)
-		print(state, step, step_limit)
 		if step_limit*3 < (step*3 + count_non_consecutive(state)):
-			return False
+			return False, None
 		if goal_test(state):
-			return True 
+			return True , path_acc
 		fringe = get_next_states(state)
 		for next_state in fringe:
-			result = search_rec(next_state, step+1, step_limit)
+			result, path = search_rec(next_state, step+1, step_limit, path_acc+[tuple(next_state)])
 			if result: 
-				return result
+				return result, path
+		return None, None
 	
 	for step_limit in range(0, 10):
-		result = search_rec(initial_state, 0, step_limit)
+		result, path = search_rec(initial_state, 0, step_limit, [tuple(initial_state)])
 		if result:
-			return step_limit
+			return step_limit, path
 
 
 
