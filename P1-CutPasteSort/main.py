@@ -110,8 +110,7 @@ def count_non_consecutive(state):
 		if prev+1 != n:
 			cnt += 1
 		prev = n
-	return cnt
-		
+	return cnt+1 if cnt>0 else cnt
 
 # STATE SPACE
 
@@ -194,6 +193,29 @@ def best_first_search(initial_state):
 				parents[state_key] = tuple(curr_state)
 	return None, None
 
+def iterative_deepening_Astar(initial_state):
+
+	def search_rec(state, step, step_limit):
+		# Try each step
+		# limit < f(n) + h(n)
+		print(state, step, step_limit)
+		if step_limit*3 < (step*3 + count_non_consecutive(state)):
+			return False
+		if goal_test(state):
+			return True 
+		fringe = get_next_states(state)
+		for next_state in fringe:
+			result = search_rec(next_state, step+1, step_limit)
+			if result: 
+				return result
+	
+	for step_limit in range(0, 10):
+		result = search_rec(initial_state, 0, step_limit)
+		if result:
+			return step_limit
+
+
+
 def get_path(state, parents):
 	state = tuple(state)
 	path = [ state ]
@@ -210,8 +232,11 @@ def get_path(state, parents):
 if __name__ == '__main__':
 	# Main Driver
 	initial_state = list(map(int, input().split()))
+	"""
 	goal_state, parents = best_first_search(initial_state)
 	for state in get_path(goal_state, parents):
 		print(state)
+	"""
+	print(iterative_deepening_Astar(initial_state))
 
 
