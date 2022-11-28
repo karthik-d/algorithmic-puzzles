@@ -45,8 +45,8 @@ Programs, reports, documentation and screenshots implemented and designed for th
     - [Code on Replit](https://replit.com/@KarthikDesingu/Ex4-DecantationProblem-IterativeDeepening)
     <br><br>
     
-5. [The Eight Queens Problem](./E5-EightQueens)
-    - Solved using the Hill Climbing approach for first solution
+5. [The Eight Queens Problem I](./E5-EightQueens)
+    - Solved using the Hill Climbing approach to find the first incident solution
     - Utility function defined in terms of the total number of attacks
     - [Documentation](./E5-EightQueens/Documentation) 
     - [Code on Replit](https://replit.com/@KarthikDesingu/Ex5-8QueensProblem-HillClimbing)
@@ -60,6 +60,24 @@ Programs, reports, documentation and screenshots implemented and designed for th
     - Solved using the A-star (A*) Search approach
     - Empirical performance analysis through code of each search approach
     - [Documentation](./E5-PolygonalObstacles/Documentation) 
-    - [Code on Replit]([https://replit.com/@KarthikDesingu/Ex5-8QueensProblem-HillClimbing](https://replit.com/@KarthikDesingu/Ex5B-PolygonalPlane-PathFinding))
+    - [Code on Replit](https://replit.com/@KarthikDesingu/Ex5B-PolygonalPlane-PathFinding)
+    <br><br>
+    
+7. [The Eight Queens Problem II](./Ex6-GeneticAlgorithm)
+    - Solved using the Genetic Algorithm approach to find the first incident solution
+    - Utility function defined in terms of the total number of attacks
+    - [Documentation](./Ex6-GeneticAlgorithm/Documentation) 
+    - [Code on Replit](https://replit.com/@KarthikDesingu/Ex6-8QueensProblem-GeneticAlgorithm)
+    <br><br>
+    
+8. [Arithmetic Expression Search](./Ex7-ExpressionSearch)
+    - Use the given six integers to arithmetically arrive at a target expression result value
+    - Four arithmetic operations are allowed with repitition: addition, subtraction, multiplication and division
+    - No fraction may be introduced into the calculation 
+    - Each given integer may be used at most once
+    - If the exact target cannot be arrived at, find the expression with value closest to the target
+    - State-space representation of problem is forulated
+    - Solved using the Breadth First Search (BFS) approach
+    - [Documentation](./Ex7-ExpressionSearch/Documentation) 
     <br><br>
     
