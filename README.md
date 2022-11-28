@@ -4,7 +4,7 @@ Programs, reports, documentation and screenshots implemented and designed for th
 
 ## Quick References
 
-### Path-finding in Plane with Abstract Polygonal Obstacles ([Exercise 5](/E5-PolygonalObstacles))
+### Path-finding in Plane with Abstract Polygonal Obstacles ([Exercise 6](/E5-PolygonalObstacles))
 
 - Problem formulation and assumptions
   <img src="/E5-PolygonalObstacles/Documentation/Outputs/StateSpaceFormulation.png" width="750">
@@ -13,7 +13,17 @@ Programs, reports, documentation and screenshots implemented and designed for th
   <img src="/E5-PolygonalObstacles/Documentation/Outputs/SampleProblem.png" width="750">
 
 ### State Space Diagram for The Decantation Problem ([Exercise 2](./E2-StateSpaceSearch(BFS)), [Exercise 4](./E4-StateSpaceSearch(BiDirectional)))
-<img src="E2-StateSpaceSearch(BFS)/Documentation/StateSpace.png" width="750">
+
+- For the decantation problem instance
+  - **Given**: filled 8-litre jar, empty 5-litre and 3-litre jars
+  - **Target**: Any one jar filled with exactly 4 litres 
+  <img src="E2-StateSpaceSearch(BFS)/Documentation/StateSpace.png" width="750">
+
+### Sample State Space for the Eight Queens Problem ([Exercise 5](./E2-StateSpaceSearch(BFS)), [Exercise 7](./E4-StateSpaceSearch(BiDirectional)))
+
+- Total number of attacks (the inverse utility value) for each next-state position on the board.
+  <img src="/E5-EightQueens/Documentation/Outputs/1.png" width="450">
+
 
 ## Exercises
 
