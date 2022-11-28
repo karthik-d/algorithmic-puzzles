@@ -54,8 +54,12 @@ Programs, reports, documentation and screenshots implemented and designed for th
     
 6. [Polygonal Path Finding Problem](./E5-PolygonalObstacles)
     - Shortest path between two points in a plane with convex polygonal obstacles
-    - Utility function defined in terms of the total number of attacks
+    - Randomized problem instance generator implemented through code
+    - Solved using the traditional Breadth First Search (BFS) approach
+    - Solved using the Best First Greedy Search approach
+    - Solved using the A-star (A*) Search approach
+    - Empirical performance analysis through code of each search approach
     - [Documentation](./E5-PolygonalObstacles/Documentation) 
-    - [Code on Replit](https://replit.com/@KarthikDesingu/Ex5-8QueensProblem-HillClimbing)
+    - [Code on Replit]([https://replit.com/@KarthikDesingu/Ex5-8QueensProblem-HillClimbing](https://replit.com/@KarthikDesingu/Ex5B-PolygonalPlane-PathFinding))
     <br><br>
     
