@@ -81,3 +81,8 @@ Programs, reports, documentation and screenshots implemented and designed for th
     - [Documentation](./Ex7-ExpressionSearch/Documentation) 
     <br><br>
     
+## Other Implementations
+
+- [Cut-Paste Sort Problem (Python and C++, both)](./P1-CutPasteSort)
+- [Utility functions for BFS](./Reusables)
+    
